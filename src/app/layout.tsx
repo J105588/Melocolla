@@ -80,12 +80,12 @@ export default function RootLayout({
                 </p>
 
                 {/* Horizontal Nav */}
-                <nav className="flex flex-wrap items-center justify-center gap-8 md:gap-12 mb-12">
+                <nav className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 md:gap-12 mb-12 max-w-sm md:max-w-none">
                   {['Home', 'Discography', 'Members', 'Events', 'Terms'].map(item => (
                     <Link
                       key={item}
                       href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
-                      className="text-[11px] tracking-[0.3em] text-brand/70 hover:text-brand transition-colors duration-500 uppercase"
+                      className="text-[10px] md:text-[11px] tracking-[0.3em] text-brand/70 hover:text-brand transition-colors duration-500 uppercase whitespace-nowrap"
                     >
                       {item}
                     </Link>

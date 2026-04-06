@@ -9,7 +9,7 @@ export default function PersistentPlayer() {
   if (!activeTrack) return null
 
   return (
-    <div className="fixed bottom-6 right-6 left-6 md:left-auto md:w-96 bg-white/80 backdrop-blur-md border border-brand/10 shadow-2xl rounded-2xl p-4 z-50 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="fixed bottom-4 md:bottom-6 right-6 left-6 md:left-auto md:w-96 bg-white/80 backdrop-blur-md border border-brand/10 shadow-2xl rounded-2xl p-4 z-50 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex items-center gap-4">
         <div className="relative w-16 h-16 rounded-xl bg-brand/5 overflow-hidden flex-shrink-0">
           {activeTrack.jacket ? (

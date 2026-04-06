@@ -10,18 +10,18 @@ export default function Home() {
       {/* ─── Hero Section ─── */}
       <section className="relative min-h-[85vh] md:min-h-[90vh] flex flex-col items-center justify-center text-center px-6">
         <ScrollReveal direction="up" delay={0.2}>
-          <h1 className="font-serif text-5xl md:text-7xl lg:text-[9rem] tracking-[0.15em] text-brand mb-10 md:mb-14 relative leading-tight md:leading-none select-none">
+          <h1 className="font-serif text-[clamp(3.5rem,15vw,6rem)] sm:text-6xl md:text-8xl lg:text-[10rem] tracking-[0.1em] md:tracking-[0.15em] text-brand mb-10 md:mb-14 relative leading-[1.1] md:leading-none select-none break-words">
             Melocolla<span className="text-accent-gold">.</span>
-            <div className="absolute -bottom-4 md:-bottom-6 left-1/2 -translate-x-1/2 w-24 md:w-36 h-px bg-gradient-to-r from-transparent via-accent-gold/50 to-transparent" />
+            <div className="absolute -bottom-4 md:-bottom-6 left-1/2 -translate-x-1/2 w-16 md:w-36 h-px bg-gradient-to-r from-transparent via-accent-gold/50 to-transparent" />
           </h1>
         </ScrollReveal>
 
         <ScrollReveal direction="up" delay={0.5} duration={2.2}>
-          <div className="max-w-4xl flex flex-col gap-8">
-            <p className="text-lg md:text-xl lg:text-2xl leading-relaxed tracking-[0.3em] font-serif italic font-light text-brand/70 whitespace-nowrap md:whitespace-normal lg:whitespace-nowrap">
+          <div className="max-w-4xl px-4 flex flex-col gap-8">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl leading-[2] md:leading-relaxed tracking-[0.2em] md:tracking-[0.3em] font-serif italic font-light text-brand/70 whitespace-normal text-balance">
               奏で、語り、共に創る。創作で繋がる共鳴の場所。
             </p>
-            <div className="w-10 h-[0.5px] bg-accent-gold/30 mx-auto" />
+            <div className="w-8 h-[0.5px] bg-accent-gold/30 mx-auto" />
           </div>
         </ScrollReveal>
 
@@ -46,10 +46,10 @@ export default function Home() {
         <ScrollReveal
           direction="up"
           delay={1.2}
-          className="absolute bottom-2 md:bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-50 hover:opacity-100 transition-opacity duration-700"
+          className="absolute bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-50 hover:opacity-100 transition-opacity duration-700 pointer-events-none sm:pointer-events-auto"
         >
           <span className="text-[10px] tracking-[0.5em] uppercase font-bold text-brand">SCROLL</span>
-          <div className="w-px h-16 md:h-24 bg-gradient-to-b from-brand/50 to-transparent relative overflow-hidden">
+          <div className="w-px h-12 md:h-24 bg-gradient-to-b from-brand/50 to-transparent relative overflow-hidden">
             <div className="absolute inset-0 bg-accent-gold animate-[scroll-line_2.5s_infinite_ease-in-out]" />
           </div>
         </ScrollReveal>
@@ -61,7 +61,7 @@ export default function Home() {
           <div className="relative group">
             <div className="absolute -inset-3 bg-gradient-to-br from-accent-gold/8 via-transparent to-accent-rose/10 rounded-[3rem] blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
 
-            <div className="glass-card relative p-12 md:p-20 lg:p-24 rounded-[3rem] text-center subtle-shine-hover">
+            <div className="glass-card relative p-10 md:p-20 lg:p-24 rounded-[2.5rem] md:rounded-[3rem] text-center subtle-shine-hover">
               {/* Corner accents */}
               <div className="absolute top-8 left-8 w-6 h-6 border-t border-l border-accent-gold/15" />
               <div className="absolute bottom-8 right-8 w-6 h-6 border-b border-r border-accent-gold/15" />

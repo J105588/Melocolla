@@ -27,25 +27,27 @@ export default function Header() {
   useEffect(() => {
     if (!overlayRef.current || !linksRef.current) return
 
+    const html = document.documentElement
     if (isMenuOpen) {
-      document.body.style.overflow = 'hidden'
+      html.classList.add('menu-open')
+      
       gsap.set(overlayRef.current, { display: 'flex' })
       gsap.fromTo(overlayRef.current,
         { opacity: 0 },
-        { opacity: 1, duration: 0.5, ease: 'power2.out' }
+        { opacity: 1, duration: 0.4, ease: 'expo.out' }
       )
       const links = linksRef.current.children
       gsap.fromTo(links,
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.6, stagger: 0.08, ease: 'power3.out', delay: 0.15 }
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.7, stagger: 0.08, ease: 'power4.out', delay: 0.1 }
       )
     } else {
-      document.body.style.overflow = ''
       gsap.to(overlayRef.current, {
         opacity: 0,
-        duration: 0.35,
-        ease: 'power2.in',
+        duration: 0.3,
+        ease: 'power2.inOut',
         onComplete: () => {
+          html.classList.remove('menu-open')
           if (overlayRef.current) gsap.set(overlayRef.current, { display: 'none' })
         }
       })
@@ -122,7 +124,7 @@ export default function Header() {
       {/* Mobile Overlay — controlled entirely by GSAP */}
       <div
         ref={overlayRef}
-        className="fixed inset-0 bg-white z-[102] flex-col items-center justify-center"
+        className="fixed inset-0 h-[100dvh] bg-white z-[102] flex-col items-center justify-center overscroll-none"
         style={{ display: 'none', opacity: 0 }}
       >
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-accent-gold/20 to-transparent" />
