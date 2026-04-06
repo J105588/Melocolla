@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand: #603E44;
+  --color-brand-muted: #8c6a70;
+  --color-accent-gold: #c9a96e;
+  --color-accent-rose: #f5e6e6;
+  --color-background: #ffffff;
+  --color-foreground: #603E44;
+  
+  --font-serif: "Noto Serif JP", serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+/* ── Base ── */
+:root {
+  --background: #fefefe;
+  --foreground: #603E44;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  letter-spacing: 0.05em;
+}
+
+/* ── Glass Card ── */
+.glass-card {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(96, 62, 68, 0.05);
+  box-shadow:
+    0 1px 2px rgba(96, 62, 68, 0.04),
+    0 24px 64px -12px rgba(96, 62, 68, 0.08);
+}
+
+/* ── Subtle Shine on Hover ── */
+.subtle-shine-hover {
+  position: relative;
+  overflow: hidden;
+}
+.subtle-shine-hover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.3) 45%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 55%
+  );
+  transform: translateX(-150%);
+  transition: none;
+}
+.subtle-shine-hover:hover::after {
+  transform: translateX(150%);
+  transition: transform 0.8s ease;
+}
+
+/* ── Soft Float ── */
+@keyframes soft-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-3px); }
+}
+.animate-soft-float {
+  animation: soft-float 6s ease-in-out infinite;
+}
+
+
+
+
+/* ── Scroll Indicator ── */
+@keyframes scroll-line {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+/* ── Footer Gradient ── */
+.footer-gradient {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(96, 62, 68, 0.02) 50%,
+    rgba(96, 62, 68, 0.04) 100%
+  );
+}
