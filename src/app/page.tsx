@@ -8,9 +8,9 @@ export default function Home() {
 
 
       {/* ─── Hero Section ─── */}
-      <section className="relative min-h-[85vh] md:min-h-[90vh] flex flex-col items-center justify-center text-center px-6">
+      <section className="relative min-h-[90vh] lg:min-h-screen flex flex-col items-center justify-center text-center px-6">
         <ScrollReveal direction="up" delay={0.2}>
-          <h1 className="font-serif text-[clamp(3.5rem,15vw,6rem)] sm:text-6xl md:text-8xl lg:text-[10rem] tracking-[0.1em] md:tracking-[0.15em] text-brand mb-10 md:mb-14 relative leading-[1.1] md:leading-none select-none break-words">
+          <h1 className="font-serif text-[clamp(4.5rem,20vw,12rem)] tracking-[0.1em] md:tracking-[0.15em] text-brand mb-8 md:mb-14 relative leading-[0.9] md:leading-none select-none break-words">
             Melocolla<span className="text-accent-gold">.</span>
             <div className="absolute -bottom-4 md:-bottom-6 left-1/2 -translate-x-1/2 w-16 md:w-36 h-px bg-gradient-to-r from-transparent via-accent-gold/50 to-transparent" />
           </h1>
@@ -26,7 +26,7 @@ export default function Home() {
         </ScrollReveal>
 
         <ScrollReveal direction="up" delay={0.8}>
-          <div className="flex flex-col md:flex-row items-center gap-6 mt-16">
+          <div className="flex flex-col md:flex-row items-center gap-6 mt-8 md:mt-12">
             <Link
               href="/discography"
               className="group px-12 py-5 bg-brand text-white rounded-full flex items-center gap-3 hover:shadow-[0_20px_50px_rgba(96,62,68,0.2)] hover:scale-[1.02] transition-all duration-500 ease-out border border-accent-gold/10 tracking-[0.3em] font-bold text-xs"
@@ -46,7 +46,7 @@ export default function Home() {
         <ScrollReveal
           direction="up"
           delay={1.2}
-          className="absolute bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-50 hover:opacity-100 transition-opacity duration-700 pointer-events-none sm:pointer-events-auto"
+          className="absolute bottom-2 md:bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-50 hover:opacity-100 transition-opacity duration-700 pointer-events-none sm:pointer-events-auto"
         >
           <span className="text-[10px] tracking-[0.5em] uppercase font-bold text-brand">SCROLL</span>
           <div className="w-px h-12 md:h-24 bg-gradient-to-b from-brand/50 to-transparent relative overflow-hidden">
@@ -77,7 +77,7 @@ export default function Home() {
 
                 <div className="flex flex-col gap-10 text-brand/55 max-w-xl mx-auto">
                   <p className="text-base md:text-lg lg:text-xl leading-relaxed tracking-[0.15em] font-medium text-brand/80">
-                    奏でる、支える、高め合う。創作で結びつくクリエイターの広場。
+                    奏でる、支える、高め合う。創作で結びつくクリエイターの集い。
                   </p>
 
                   <div className="w-8 h-[0.5px] bg-brand/8 mx-auto" />
@@ -88,7 +88,7 @@ export default function Home() {
 
                   <div className="mt-6">
                     <Link
-                      href="https://discord.gg/your-link"
+                      href="https://discord.gg/qvnm4b9ACw"
                       target="_blank"
                       className="inline-flex items-center gap-6 px-14 py-4 border border-brand/8 text-brand/75 rounded-full hover:bg-brand hover:text-white hover:border-brand transition-all duration-700 tracking-[0.3em] font-bold text-[11px] group/btn"
                     >
