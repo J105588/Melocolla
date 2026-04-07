@@ -24,6 +24,7 @@ export type Member = {
   avatar_url: string
   bio: string
   sns_links: { platform: string; url: string }[]
+  sort_order: number
 }
 
 export type Event = {

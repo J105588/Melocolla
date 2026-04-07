@@ -158,6 +158,17 @@ export default function AdminPage() {
         payload.tracklist = editingItem?.tracklist || []
       }
 
+      // Map 'title' field to correct database column names
+      if (activeTab === 'members') {
+        payload.name = payload.title || editingItem?.name || ''
+        delete payload.title
+        // Ensure sort_order is a number
+        payload.sort_order = parseInt(payload.sort_order as string || '0', 10)
+      } else if (activeTab === 'events') {
+        payload.event_name = payload.title || editingItem?.event_name || ''
+        delete payload.title
+      }
+
       const { error } = await supabase
         .from(activeTab)
         .upsert({ id: editingItem?.id, ...payload, ...(activeTab === 'activities' ? { content: quillContent } : {}) })
@@ -427,8 +438,20 @@ export default function AdminPage() {
 
                 {activeTab === 'members' && (
                   <>
-                    <input name="role" defaultValue={editingItem?.role} placeholder="Role (e.g. Producer, Vocal)" className="w-full p-4 rounded-xl bg-brand/5 border-none outline-none" />
-                    <textarea name="bio" defaultValue={editingItem?.bio} placeholder="Creator Biography" className="w-full p-4 rounded-xl bg-brand/5 border-none outline-none h-32 text-sm" />
+                    <div className="grid sm:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                         <label className="text-[10px] font-bold tracking-widest text-brand/40 uppercase px-1">Role</label>
+                         <input name="role" defaultValue={editingItem?.role} placeholder="Producer, Vocal, etc." className="w-full p-4 rounded-xl bg-brand/5 border-none outline-none" />
+                      </div>
+                      <div className="space-y-2">
+                         <label className="text-[10px] font-bold tracking-widest text-brand/40 uppercase px-1">Display Priority (Lower = First)</label>
+                         <input name="sort_order" type="number" defaultValue={editingItem?.sort_order || 0} className="w-full p-4 rounded-xl bg-brand/5 border-none outline-none" />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                       <label className="text-[10px] font-bold tracking-widest text-brand/40 uppercase px-1">Creator Biography</label>
+                       <textarea name="bio" defaultValue={editingItem?.bio} placeholder="Enter biography... Line breaks will be preserved." className="w-full p-4 rounded-xl bg-brand/5 border-none outline-none h-40 text-sm" />
+                    </div>
                     
                     <div className="space-y-4">
                       <div className="flex justify-between items-center px-1">
@@ -441,6 +464,7 @@ export default function AdminPage() {
                              <select value={link.platform} onChange={(e) => updateSnsLink(index, 'platform', e.target.value)} className="w-24 p-3 rounded-lg bg-brand/5 border-none outline-none text-[10px] font-bold">
                                <option value="X">X</option>
                                <option value="Youtube">Youtube</option>
+                               <option value="Niconico">Niconico</option>
                                <option value="Instagram">Instagram</option>
                                <option value="Soundcloud">Soundcloud</option>
                                <option value="Discord">Discord</option>

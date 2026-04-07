@@ -2,6 +2,7 @@ import { supabase, Discography } from '@/lib/supabase'
 import { Music, Play, ArrowLeft, Clock } from 'lucide-react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import ScrollReveal from '@/components/animation/ScrollReveal'
 
 export const revalidate = 3600
 
@@ -22,32 +23,37 @@ export default async function AlbumDetailPage({ params }: { params: { id: string
   if (!album) notFound()
 
   return (
-    <div className="container mx-auto px-6 py-24 animate-in fade-in duration-1000">
-      <Link 
-        href="/discography" 
-        className="inline-flex items-center gap-2 text-sm text-brand-muted hover:text-brand transition-colors mb-16 group"
-      >
-        <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-        BACK TO LIST
-      </Link>
+    <div className="container mx-auto px-6 py-24">
+      <ScrollReveal direction="up" distance={20}>
+        <Link 
+          href="/discography" 
+          className="inline-flex items-center gap-2 text-sm text-brand-muted hover:text-brand transition-colors mb-16 group"
+        >
+          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+          BACK TO LIST
+        </Link>
+      </ScrollReveal>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-32">
-        {/* Left: Jacket Art */}
-        <div className="relative group self-start">
-          <div className="absolute inset-0 bg-brand/5 rounded-3xl -rotate-2 -z-10 group-hover:rotate-0 transition-transform duration-700" />
-          <div className="aspect-square rounded-3xl overflow-hidden shadow-2xl">
-            {album.jacket_url ? (
-              <img src={album.jacket_url} alt={album.title} className="w-full h-full object-cover" />
-            ) : (
-              <div className="w-full h-full bg-brand/5 flex items-center justify-center text-brand/20">
-                <Music size={128} strokeWidth={0.5} />
-              </div>
-            )}
+        <ScrollReveal direction="right" distance={40} delay={0.2}>
+          {/* Left: Jacket Art */}
+          <div className="relative group self-start">
+            <div className="absolute inset-0 bg-brand/5 rounded-3xl -rotate-2 -z-10 group-hover:rotate-0 transition-transform duration-700" />
+            <div className="aspect-square rounded-3xl overflow-hidden shadow-2xl">
+              {album.jacket_url ? (
+                <img src={album.jacket_url} alt={album.title} className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full bg-brand/5 flex items-center justify-center text-brand/20">
+                  <Music size={128} strokeWidth={0.5} />
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        </ScrollReveal>
 
         {/* Right: Info & Tracklist */}
-        <div className="flex flex-col gap-12">
+        <ScrollReveal direction="left" distance={40} delay={0.4}>
+          <div className="flex flex-col gap-12">
           <header>
             <p className="text-xs font-bold tracking-widest text-brand-muted uppercase mb-4">
               RELEASED AT {new Date(album.release_date).toLocaleDateString('ja-JP')}
@@ -85,7 +91,8 @@ export default async function AlbumDetailPage({ params }: { params: { id: string
               ))}
             </div>
           </div>
-        </div>
+          </div>
+        </ScrollReveal>
       </div>
     </div>
   )

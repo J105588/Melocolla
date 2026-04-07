@@ -4,8 +4,7 @@ import { useEffect, useState, useRef } from 'react'
 import { supabase, Activity } from '@/lib/supabase'
 import Header from '@/components/layout/Header'
 import { Newspaper, Calendar, ChevronRight, ChevronDown, Loader2 } from 'lucide-react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import ScrollReveal from '@/components/animation/ScrollReveal'
 
 export default function ActivityPage() {
   const [activities, setActivities] = useState<Activity[]>([])
@@ -38,27 +37,6 @@ export default function ActivityPage() {
     })
   }
 
-  useEffect(() => {
-    if (!loading && activities.length > 0) {
-      gsap.registerPlugin(ScrollTrigger)
-      const items = gsap.utils.toArray('.activity-card')
-      items.forEach((item: any) => {
-        gsap.fromTo(item,
-          { opacity: 0, y: 30 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: item,
-              start: 'top 90%',
-            }
-          }
-        )
-      })
-    }
-  }, [loading, activities])
 
   return (
     <div className="min-h-screen bg-[#fcfaf8] selection:bg-accent-gold/20">
@@ -66,13 +44,14 @@ export default function ActivityPage() {
 
       <main className="pt-32 pb-24" ref={containerRef}>
         <div className="container mx-auto px-6">
-          {/* Hero Section */}
-          <section className="mb-20 text-center">
-            <h1 className="font-serif text-5xl lg:text-7xl tracking-[0.2em] text-brand mb-8 uppercase">
-              ACTIVITY <span className="text-accent-gold">FEED</span>
-            </h1>
-            <div className="w-16 h-px bg-accent-gold mx-auto" />
-          </section>
+          <ScrollReveal direction="up" distance={40}>
+            <section className="mb-20 text-center">
+              <h1 className="font-serif text-5xl lg:text-7xl tracking-[0.2em] text-brand mb-8 uppercase">
+                ACTIVITY <span className="text-accent-gold">FEED</span>
+              </h1>
+              <div className="w-16 h-px bg-accent-gold mx-auto" />
+            </section>
+          </ScrollReveal>
 
           {loading ? (
             <div className="flex flex-col items-center justify-center py-40 text-brand/20">
@@ -84,7 +63,8 @@ export default function ActivityPage() {
               <p className="font-serif tracking-[0.2em] text-brand/30 uppercase">No Activity Recorded Yet</p>
             </div>
           ) : (
-            <div className="grid gap-12 max-w-5xl mx-auto">
+            <ScrollReveal stagger={0.1}>
+              <div className="grid gap-12 max-w-5xl mx-auto">
               {activities.map((activity) => (
                 <article key={activity.id} className="activity-card group bg-white border border-brand/5 rounded-[2.5rem] overflow-hidden shadow-[0_10px_40px_rgba(96,62,68,0.02)] transition-all hover:shadow-[0_20px_60px_rgba(96,62,68,0.06)] hover:border-accent-gold/20">
                   <div className="flex flex-col lg:flex-row">
@@ -137,8 +117,9 @@ export default function ActivityPage() {
                 </article>
               ))}
             </div>
-          )}
-        </div>
+          </ScrollReveal>
+        )}
+      </div>
       </main>
 
 

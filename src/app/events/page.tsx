@@ -2,6 +2,7 @@ import { supabase, Event } from '@/lib/supabase'
 import { Calendar, ExternalLink, Clock, CheckCircle2 } from 'lucide-react'
 import Link from 'next/link'
 import { Metadata } from 'next'
+import ScrollReveal from '@/components/animation/ScrollReveal'
 
 export const metadata: Metadata = {
   title: 'Events | Melocolla',
@@ -27,19 +28,23 @@ export default async function EventsPage() {
 
   return (
     <div className="container mx-auto px-6 py-24">
-      <div className="max-w-4xl mx-auto mb-20 text-center animate-in fade-in slide-in-from-bottom-8 duration-1000">
-        <h1 className="font-serif text-5xl md:text-6xl tracking-widest text-brand mb-8 uppercase">
-          EVENTS<span className="text-accent-gold ml-2">.</span>
-        </h1>
-        <div className="w-16 h-px bg-gradient-to-r from-transparent via-accent-gold/40 to-transparent mx-auto mb-8" />
-      </div>
+      <ScrollReveal direction="up" distance={40}>
+        <div className="max-w-4xl mx-auto mb-20 text-center">
+          <h1 className="font-serif text-5xl md:text-6xl tracking-widest text-brand mb-8 uppercase">
+            EVENTS<span className="text-accent-gold ml-2">.</span>
+          </h1>
+          <div className="w-16 h-px bg-gradient-to-r from-transparent via-accent-gold/40 to-transparent mx-auto mb-8" />
+        </div>
+      </ScrollReveal>
 
       {events.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
-          {events.map((event, i) => (
-            <EventCard key={event.id} event={event} index={i} />
-          ))}
-        </div>
+        <ScrollReveal stagger={0.15}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+            {events.map((event, i) => (
+              <EventCard key={event.id} event={event} index={i} />
+            ))}
+          </div>
+        </ScrollReveal>
       ) : (
         <div className="flex flex-col items-center justify-center py-40 opacity-20">
           <Calendar size={64} strokeWidth={1} className="mb-6 text-brand" />
@@ -61,8 +66,7 @@ function EventCard({ event, index }: { event: Event, index: number }) {
 
   return (
     <div
-      className="group glass-card overflow-hidden rounded-[2.5rem] flex flex-col h-full animate-in fade-in slide-in-from-bottom-12 duration-1000 fill-mode-both"
-      style={{ animationDelay: `${index * 150}ms` }}
+      className="group glass-card overflow-hidden rounded-[2.5rem] flex flex-col h-full"
     >
       {/* Thumbnail */}
       <div className="relative aspect-[16/9] overflow-hidden bg-brand/5">

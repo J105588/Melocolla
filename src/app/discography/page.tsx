@@ -2,6 +2,7 @@ import { supabase, Discography } from '@/lib/supabase'
 import { Music, Play } from 'lucide-react'
 import Link from 'next/link'
 import { Metadata } from 'next'
+import ScrollReveal from '@/components/animation/ScrollReveal'
 
 export const metadata: Metadata = {
   title: 'Discography | Melocolla',
@@ -29,19 +30,23 @@ export default async function DiscographyPage() {
 
   return (
     <div className="container mx-auto px-6 py-24">
-      <div className="max-w-4xl mx-auto mb-20 text-center">
-        <h1 className="font-serif text-5xl tracking-widest text-brand mb-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
-          DISCOGRAPHY<span className="text-accent-gold ml-2">.</span>
-        </h1>
-        <div className="w-12 h-px bg-gradient-to-r from-transparent via-accent-gold to-transparent mx-auto" />
-      </div>
+      <ScrollReveal direction="up" distance={40}>
+        <div className="max-w-4xl mx-auto mb-20 text-center">
+          <h1 className="font-serif text-5xl tracking-widest text-brand mb-8">
+            DISCOGRAPHY<span className="text-accent-gold ml-2">.</span>
+          </h1>
+          <div className="w-12 h-px bg-gradient-to-r from-transparent via-accent-gold to-transparent mx-auto" />
+        </div>
+      </ScrollReveal>
 
       {discography.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-          {discography.map((album, i) => (
-            <AlbumCard key={album.id} album={album} index={i} />
-          ))}
-        </div>
+        <ScrollReveal stagger={0.1}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+            {discography.map((album, i) => (
+              <AlbumCard key={album.id} album={album} index={i} />
+            ))}
+          </div>
+        </ScrollReveal>
       ) : (
         <div className="flex flex-col items-center justify-center py-32 opacity-20">
           <Music size={64} strokeWidth={1} className="mb-6" />
@@ -56,8 +61,7 @@ function AlbumCard({ album, index }: { album: Discography, index: number }) {
   return (
     <Link
       href={`/discography/${album.id}`}
-      className="group flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-12 duration-1000"
-      style={{ animationDelay: `${index * 100}ms` }}
+      className="group flex flex-col gap-6"
     >
       <div className="relative aspect-square rounded-3xl overflow-hidden shadow-sm group-hover:shadow-2xl transition-all duration-700">
         {album.jacket_url ? (

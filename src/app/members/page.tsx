@@ -1,6 +1,7 @@
 import { supabase, Member } from '@/lib/supabase'
 import { Users, ExternalLink } from 'lucide-react'
 import { Metadata } from 'next'
+import ScrollReveal from '@/components/animation/ScrollReveal'
 
 export const metadata: Metadata = {
   title: 'Members | Melocolla',
@@ -12,7 +13,8 @@ async function getMembers() {
     .from('members')
     .select('*')
     .eq('is_public', true)
-    .order('name')
+    .order('sort_order', { ascending: true })
+    .order('name', { ascending: true })
 
   if (error) {
     console.error('Error fetching members:', error)
@@ -26,19 +28,23 @@ export default async function MembersPage() {
 
   return (
     <div className="container mx-auto px-6 py-24">
-      <div className="max-w-4xl mx-auto mb-20 text-center">
-        <h1 className="font-serif text-5xl tracking-widest text-brand mb-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
-          MEMBERS<span className="text-accent-gold ml-2">.</span>
-        </h1>
-        <div className="w-12 h-px bg-gradient-to-r from-transparent via-accent-gold to-transparent mx-auto" />
-      </div>
+      <ScrollReveal direction="up" distance={40}>
+        <div className="max-w-4xl mx-auto mb-20 text-center">
+          <h1 className="font-serif text-5xl tracking-widest text-brand mb-8">
+            MEMBERS<span className="text-accent-gold ml-2">.</span>
+          </h1>
+          <div className="w-12 h-px bg-gradient-to-r from-transparent via-accent-gold to-transparent mx-auto" />
+        </div>
+      </ScrollReveal>
 
       {members.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
-          {members.map((member, i) => (
-            <MemberCard key={member.id} member={member} index={i} />
-          ))}
-        </div>
+        <ScrollReveal stagger={0.15}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
+            {members.map((member, i) => (
+              <MemberCard key={member.id} member={member} index={i} />
+            ))}
+          </div>
+        </ScrollReveal>
       ) : (
         <div className="flex flex-col items-center justify-center py-32 opacity-20">
           <Users size={64} strokeWidth={1} className="mb-6" />
@@ -52,8 +58,7 @@ export default async function MembersPage() {
 function MemberCard({ member, index }: { member: Member, index: number }) {
   return (
     <div
-      className="group flex flex-col items-center text-center animate-in fade-in slide-in-from-bottom-12 duration-1000"
-      style={{ animationDelay: `${index * 150}ms` }}
+      className="group flex flex-col items-center text-center"
     >
       <div className="relative w-40 h-40 mb-8">
         <div className="absolute inset-0 rounded-full border border-brand/10 group-hover:scale-110 transition-transform duration-700" />
@@ -75,7 +80,7 @@ function MemberCard({ member, index }: { member: Member, index: number }) {
       <div className="flex flex-col gap-2">
         <h3 className="font-serif text-2xl tracking-widest text-brand">{member.name}</h3>
         <p className="text-xs uppercase tracking-widest text-brand-muted font-bold">{member.role}</p>
-        <p className="mt-4 text-sm text-brand/60 leading-relaxed max-w-xs">{member.bio}</p>
+        <p className="mt-4 text-sm text-brand/60 leading-relaxed max-w-xs whitespace-pre-wrap">{member.bio}</p>
 
         <div className="flex items-center justify-center gap-2 mt-8">
           {member.sns_links?.map((link, i) => {
@@ -121,6 +126,13 @@ function SNSIcon({ platform }: { platform: string }) {
     return (
       <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
         <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
+      </svg>
+    )
+  }
+  if (platform.includes('niconico')) {
+    return (
+      <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+        <path d="M.4787 7.534v12.1279A2.0213 2.0213 0 0 0 2.5 21.6832h2.3888l1.323 2.0948a.4778.4778 0 0 0 .4043.2205.4778.4778 0 0 0 .441-.2205l1.323-2.0948h6.9828l1.323 2.0948a.4778.4778 0 0 0 .441.2205c.1838 0 .3308-.0735.4043-.2205l1.323-2.0948h2.6462a2.0213 2.0213 0 0 0 2.0213-2.0213V7.5339a2.0213 2.0213 0 0 0-2.0213-1.9845h-7.681l4.4468-4.4469L17.1637 0l-5.1452 5.1452L6.8 0 5.6973 1.1025l4.4102 4.4102H2.5367a2.0213 2.0213 0 0 0-2.058 2.058z"/>
       </svg>
     )
   }
