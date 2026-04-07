@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS events (
   status TEXT CHECK (status IN ('upcoming', 'ongoing', 'completed')),
   link_url TEXT,
   thumbnail_url TEXT,
+  jacket_url TEXT,
   is_public BOOLEAN DEFAULT true
 );
 
@@ -55,12 +56,27 @@ BEGIN
   IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='events' AND column_name='is_public') THEN
     ALTER TABLE events ADD COLUMN is_public BOOLEAN DEFAULT true;
   END IF;
+  
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='events' AND column_name='jacket_url') THEN
+    ALTER TABLE events ADD COLUMN jacket_url TEXT;
+  END IF;
 END $$;
+
+-- 5. Activities Table
+CREATE TABLE IF NOT EXISTS activities (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  title TEXT NOT NULL,
+  content TEXT NOT NULL,
+  image_url TEXT,
+  is_public BOOLEAN DEFAULT true
+);
 
 -- 5. Row Level Security (RLS)
 ALTER TABLE discography ENABLE ROW LEVEL SECURITY;
 ALTER TABLE members ENABLE ROW LEVEL SECURITY;
 ALTER TABLE events ENABLE ROW LEVEL SECURITY;
+ALTER TABLE activities ENABLE ROW LEVEL SECURITY;
 
 -- 6. Policies (Public Access)
 -- DROP POLICY IF EXISTS を使って重複作成を防止
@@ -87,4 +103,12 @@ CREATE POLICY "Admins have full access to members" ON members
 
 DROP POLICY IF EXISTS "Admins have full access to events" ON events;
 CREATE POLICY "Admins have full access to events" ON events
+  FOR ALL TO authenticated USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Public can read public activities" ON activities;
+CREATE POLICY "Public can read public activities" ON activities
+  FOR SELECT USING (is_public = true);
+
+DROP POLICY IF EXISTS "Admins have full access to activities" ON activities;
+CREATE POLICY "Admins have full access to activities" ON activities
   FOR ALL TO authenticated USING (true) WITH CHECK (true);

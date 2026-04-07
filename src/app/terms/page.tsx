@@ -1,3 +1,10 @@
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Terms of Service',
+  description: 'Melocollaの利用規約、著作権、プライバシーポリシーについて。',
+}
+
 export default function TermsPage() {
   return (
     <div className="container mx-auto px-6 py-24 max-w-3xl">

@@ -95,11 +95,71 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ── Footer Gradient ── */
-.footer-gradient {
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(96, 62, 68, 0.02) 50%,
-    rgba(96, 62, 68, 0.04) 100%
-  );
+/* ── Markdown & Rich Text Content ── */
+.markdown-content strong,
+.rich-text-content strong {
+  color: var(--color-brand);
+  font-weight: 700;
+  border-bottom: 1px dotted var(--color-accent-gold);
 }
+
+.markdown-content em,
+.rich-text-content em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--color-accent-gold);
+}
+
+.markdown-content h1, 
+.markdown-content h2, 
+.markdown-content h3,
+.rich-text-content h1,
+.rich-text-content h2,
+.rich-text-content h3 {
+  color: var(--color-brand);
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+}
+
+.markdown-content ul,
+.rich-text-content ul,
+.markdown-content ol,
+.rich-text-content ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.markdown-content ul,
+.rich-text-content ul {
+  list-style-type: disc;
+}
+
+.markdown-content ol,
+.rich-text-content ol {
+  list-style-type: decimal;
+}
+
+.markdown-content li,
+.rich-text-content li {
+  margin-bottom: 0.5rem;
+}
+
+.markdown-content blockquote,
+.rich-text-content blockquote {
+  border-left: 3px solid var(--color-accent-gold);
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: var(--color-brand-muted);
+}
+
+/* ── Quill Specific ── */
+.ql-indent-1 { padding-left: 2rem; }
+.ql-indent-2 { padding-left: 4rem; }
+.ql-indent-3 { padding-left: 6rem; }
+.ql-indent-4 { padding-left: 8rem; }
+.ql-indent-5 { padding-left: 10rem; }
+.ql-indent-6 { padding-left: 12rem; }
+.ql-indent-7 { padding-left: 14rem; }
+.ql-indent-8 { padding-left: 16rem; }

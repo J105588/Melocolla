@@ -1,6 +1,12 @@
 import Link from 'next/link'
 import { ArrowRight, Music, Calendar, Users } from 'lucide-react'
 import ScrollReveal from '@/components/animation/ScrollReveal'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Home | Melocolla',
+  description: '奏で、語り、共に創る。創作で繋がる共鳴の場所。Melocollaサークル公式ウェブサイト。',
+}
 
 export default function Home() {
   return (
@@ -10,7 +16,7 @@ export default function Home() {
       {/* ─── Hero Section ─── */}
       <section className="relative min-h-[90vh] lg:min-h-screen flex flex-col items-center justify-center text-center px-6">
         <ScrollReveal direction="up" delay={0.2}>
-          <h1 className="font-serif text-[clamp(4.5rem,20vw,12rem)] tracking-[0.1em] md:tracking-[0.15em] text-brand mb-8 md:mb-14 relative leading-[0.9] md:leading-none select-none break-words">
+          <h1 className="font-serif text-[clamp(2.5rem,10.5vw,12rem)] tracking-tight md:tracking-[0.1em] text-brand mb-8 md:mb-14 relative leading-[0.9] md:leading-none select-none break-words">
             Melocolla<span className="text-accent-gold">.</span>
             <div className="absolute -bottom-4 md:-bottom-6 left-1/2 -translate-x-1/2 w-16 md:w-36 h-px bg-gradient-to-r from-transparent via-accent-gold/50 to-transparent" />
           </h1>

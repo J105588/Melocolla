@@ -6,6 +6,7 @@ import gsap from 'gsap'
 
 const navItems = [
   { name: 'Home', path: '/' },
+  { name: 'Activity', path: '/activity' },
   { name: 'Discography', path: '/discography' },
   { name: 'Members', path: '/members' },
   { name: 'Events', path: '/events' },

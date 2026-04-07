@@ -33,4 +33,14 @@ export type Event = {
   status: 'upcoming' | 'ongoing' | 'completed'
   link_url: string
   thumbnail_url: string
+  jacket_url: string
+}
+
+export type Activity = {
+  id: string
+  created_at: string
+  title: string
+  content: string
+  image_url: string
+  is_public: boolean
 }

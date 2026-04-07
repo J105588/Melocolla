@@ -1,6 +1,12 @@
 import { supabase, Event } from '@/lib/supabase'
 import { Calendar, ExternalLink, Clock, CheckCircle2 } from 'lucide-react'
 import Link from 'next/link'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Events | Melocolla',
+  description: 'Melocollaの最新イベント・投稿祭のスケジュール。',
+}
 
 async function getEvents() {
   const { data, error } = await supabase

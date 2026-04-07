@@ -1,6 +1,12 @@
 import { supabase, Discography } from '@/lib/supabase'
 import { Music, Play } from 'lucide-react'
 import Link from 'next/link'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Discography | Melocolla',
+  description: 'Melocollaの音楽作品一覧。共鳴する感性が紡ぎ出す、最新のリリース情報。',
+}
 
 export const revalidate = 3600 // revalidate every hour
 
@@ -48,16 +54,16 @@ export default async function DiscographyPage() {
 
 function AlbumCard({ album, index }: { album: Discography, index: number }) {
   return (
-    <Link 
+    <Link
       href={`/discography/${album.id}`}
       className="group flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-12 duration-1000"
       style={{ animationDelay: `${index * 100}ms` }}
     >
       <div className="relative aspect-square rounded-3xl overflow-hidden shadow-sm group-hover:shadow-2xl transition-all duration-700">
         {album.jacket_url ? (
-          <img 
-            src={album.jacket_url} 
-            alt={album.title} 
+          <img
+            src={album.jacket_url}
+            alt={album.title}
             className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
           />
         ) : (
@@ -71,7 +77,7 @@ function AlbumCard({ album, index }: { album: Discography, index: number }) {
           </div>
         </div>
       </div>
-      
+
       <div className="flex flex-col gap-1 px-2">
         <h3 className="font-serif text-lg tracking-widest text-brand group-hover:text-brand-muted transition-colors truncate">
           {album.title}
