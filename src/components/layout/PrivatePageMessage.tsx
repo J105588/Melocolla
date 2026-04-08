@@ -27,7 +27,7 @@ export default function PrivatePageMessage() {
         </div>
 
         <p className="mt-16 text-[9px] text-brand/20 tracking-[0.5em] uppercase font-bold">
-          Melocolla Resonance System
+          Melocolla Circle System
         </p>
       </div>
     </ScrollReveal>

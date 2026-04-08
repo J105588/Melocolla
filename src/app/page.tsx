@@ -111,7 +111,7 @@ export default async function Home() {
                           target="_blank"
                           className="inline-flex items-center gap-6 px-14 py-4 border border-brand/8 text-brand/75 rounded-full hover:bg-brand hover:text-white hover:border-brand transition-all duration-700 tracking-[0.3em] font-bold text-[11px] group/btn"
                         >
-                          JOIN THE RESONANCE
+                          JOIN THE CIRCLE
                           <ArrowRight size={12} className="text-accent-gold group-hover/btn:translate-x-1.5 group-hover/btn:text-white transition-all duration-500" />
                         </Link>
                       </div>
