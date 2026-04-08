@@ -49,7 +49,7 @@ export default function NotFound() {
 
         {/* Subtle Brand Mark */}
         <p className="mt-12 text-center text-[10px] tracking-[0.6em] text-brand/20 uppercase font-bold select-none">
-          Melocolla.
+          Melocolla Circle System
         </p>
       </div>
     </div>
