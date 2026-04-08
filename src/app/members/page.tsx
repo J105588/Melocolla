@@ -2,6 +2,8 @@ import { supabase, Member } from '@/lib/supabase'
 import { Users, ExternalLink } from 'lucide-react'
 import { Metadata } from 'next'
 import ScrollReveal from '@/components/animation/ScrollReveal'
+import { getPageVisibility, isAdmin } from '@/lib/page-visibility'
+import PrivatePageMessage from '@/components/layout/PrivatePageMessage'
 
 export const metadata: Metadata = {
   title: 'Members | Melocolla',
@@ -24,7 +26,11 @@ async function getMembers() {
 }
 
 export default async function MembersPage() {
-  const members = await getMembers()
+  const visibility = await getPageVisibility('members')
+  const admin = await isAdmin()
+  const isPrivate = visibility && !visibility.is_public && !admin
+  const members = isPrivate ? [] : await getMembers()
+
 
   return (
     <div className="container mx-auto px-6 py-24">
@@ -37,7 +43,9 @@ export default async function MembersPage() {
         </div>
       </ScrollReveal>
 
-      {members.length > 0 ? (
+      {isPrivate ? (
+        <PrivatePageMessage />
+      ) : members.length > 0 ? (
         <ScrollReveal stagger={0.15}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
             {members.map((member, i) => (

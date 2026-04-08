@@ -5,15 +5,28 @@ import { supabase, Activity } from '@/lib/supabase'
 import Header from '@/components/layout/Header'
 import { Newspaper, Calendar, ChevronRight, ChevronDown, Loader2 } from 'lucide-react'
 import ScrollReveal from '@/components/animation/ScrollReveal'
+import { getPageVisibility, isAdmin } from '@/lib/page-visibility'
+import PrivatePageMessage from '@/components/layout/PrivatePageMessage'
 
 export default function ActivityPage() {
   const [activities, setActivities] = useState<Activity[]>([])
   const [loading, setLoading] = useState(true)
+  const [isPrivate, setIsPrivate] = useState(false)
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set())
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    fetchActivities()
+    const checkVisibility = async () => {
+      const visibility = await getPageVisibility('activity')
+      const admin = await isAdmin()
+      if (visibility && !visibility.is_public && !admin) {
+        setIsPrivate(true)
+        setLoading(false)
+      } else {
+        fetchActivities()
+      }
+    }
+    checkVisibility()
   }, [])
 
   const fetchActivities = async () => {
@@ -53,7 +66,9 @@ export default function ActivityPage() {
             </section>
           </ScrollReveal>
 
-          {loading ? (
+          {isPrivate ? (
+            <PrivatePageMessage />
+          ) : loading ? (
             <div className="flex flex-col items-center justify-center py-40 text-brand/20">
               <Loader2 className="animate-spin mb-4" size={32} />
               <p className="font-serif tracking-[0.3em] uppercase text-xs">Synchronizing Archive...</p>

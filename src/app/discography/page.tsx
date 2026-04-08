@@ -3,6 +3,8 @@ import { Music, Play } from 'lucide-react'
 import Link from 'next/link'
 import { Metadata } from 'next'
 import ScrollReveal from '@/components/animation/ScrollReveal'
+import { getPageVisibility, isAdmin } from '@/lib/page-visibility'
+import PrivatePageMessage from '@/components/layout/PrivatePageMessage'
 
 export const metadata: Metadata = {
   title: 'Discography | Melocolla',
@@ -26,7 +28,11 @@ async function getDiscography() {
 }
 
 export default async function DiscographyPage() {
-  const discography = await getDiscography()
+  const visibility = await getPageVisibility('discography')
+  const admin = await isAdmin()
+  const isPrivate = visibility && !visibility.is_public && !admin
+  const discography = isPrivate ? [] : await getDiscography()
+
 
   return (
     <div className="container mx-auto px-6 py-24">
@@ -39,7 +45,9 @@ export default async function DiscographyPage() {
         </div>
       </ScrollReveal>
 
-      {discography.length > 0 ? (
+      {isPrivate ? (
+        <PrivatePageMessage />
+      ) : discography.length > 0 ? (
         <ScrollReveal stagger={0.1}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
             {discography.map((album, i) => (

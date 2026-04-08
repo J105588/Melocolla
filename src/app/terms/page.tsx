@@ -1,12 +1,18 @@
 import { Metadata } from 'next'
 import ScrollReveal from '@/components/animation/ScrollReveal'
+import { getPageVisibility, isAdmin } from '@/lib/page-visibility'
+import PrivatePageMessage from '@/components/layout/PrivatePageMessage'
 
 export const metadata: Metadata = {
   title: 'Terms of Service',
   description: 'Melocollaの利用規約、著作権、プライバシーポリシーについて。',
 }
 
-export default function TermsPage() {
+export default async function TermsPage() {
+  const visibility = await getPageVisibility('terms')
+  const admin = await isAdmin()
+  const isPrivate = visibility && !visibility.is_public && !admin
+
   return (
     <div className="container mx-auto px-6 py-24 max-w-3xl">
       <ScrollReveal direction="up" distance={40}>
@@ -19,7 +25,10 @@ export default function TermsPage() {
       </ScrollReveal>
 
       <div className="flex flex-col gap-16">
-        <ScrollReveal direction="up" distance={30} stagger={0.2}>
+        {isPrivate ? (
+          <PrivatePageMessage />
+        ) : (
+          <ScrollReveal direction="up" distance={30} stagger={0.2}>
         {/* 著作権 */}
         <section className="flex flex-col gap-6">
           <h2 className="font-serif text-xl tracking-[0.15em] text-brand flex items-center gap-4">
@@ -103,7 +112,8 @@ export default function TermsPage() {
           </div>
         </section>
       </ScrollReveal>
-    </div>
+        )}
+      </div>
 
       {/* Bottom */}
       <div className="mt-24 pt-12 border-t border-brand/5 text-center">

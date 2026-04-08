@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase'
 import { 
   Music, Users, Calendar, LogOut, Plus, Edit, Trash2, 
   Save, X, Radio, Newspaper, Upload, Link as LinkIcon, 
-  ChevronRight, Menu, Loader2, Eye, Edit3
+  ChevronRight, Menu, Loader2, Eye, Edit3, Settings
 } from 'lucide-react'
 import RichTextEditor from '@/components/admin/RichTextEditor'
 
@@ -18,7 +18,7 @@ export default function AdminPage() {
   const [operationLoading, setOperationLoading] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [activeTab, setActiveTab] = useState<'discography' | 'members' | 'events' | 'activities'>('discography')
+  const [activeTab, setActiveTab] = useState<'discography' | 'members' | 'events' | 'activities' | 'page_settings'>('discography')
   const [data, setData] = useState<any[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<any>(null)
@@ -75,14 +75,31 @@ export default function AdminPage() {
 
   const fetchData = async () => {
     setLoading(true)
-    const { data, error } = await supabase
-      .from(activeTab)
-      .select('*')
-      .order('created_at', { ascending: false })
+    let query = supabase.from(activeTab).select('*')
+    
+    if (activeTab === 'page_settings') {
+      query = query.order('id', { ascending: true })
+    } else {
+      query = query.order('created_at', { ascending: false })
+    }
+
+    const { data, error } = await query
     
     if (error) console.error(error)
     else setData(data || [])
     setLoading(false)
+  }
+
+  const handleToggleVisibility = async (id: string, isPublic: boolean) => {
+    setOperationLoading(true)
+    const { error } = await supabase
+      .from('page_settings')
+      .update({ is_public: isPublic, updated_at: new Date().toISOString() })
+      .eq('id', id)
+    
+    if (error) alert(error.message)
+    else fetchData()
+    setOperationLoading(false)
   }
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -291,6 +308,7 @@ export default function AdminPage() {
             <TabButton active={activeTab === 'members'} onClick={() => { setActiveTab('members'); setIsSidebarOpen(false); }} icon={<Users size={18} />} label="CREATORS" />
             <TabButton active={activeTab === 'events'} onClick={() => { setActiveTab('events'); setIsSidebarOpen(false); }} icon={<Calendar size={18} />} label="STREAMS" />
             <TabButton active={activeTab === 'activities'} onClick={() => { setActiveTab('activities'); setIsSidebarOpen(false); }} icon={<Newspaper size={18} />} label="ACTIVITY" />
+            <TabButton active={activeTab === 'page_settings'} onClick={() => { setActiveTab('page_settings'); setIsSidebarOpen(false); }} icon={<Settings size={18} />} label="SETTINGS" />
             
             <div className="mt-12 p-6 rounded-3xl bg-accent-gold/5 border border-accent-gold/10">
               <div className="flex items-center gap-3 mb-4 text-accent-gold">
@@ -307,14 +325,16 @@ export default function AdminPage() {
           {/* Content */}
           <main className="flex-1 bg-white/40 backdrop-blur-xl rounded-[2.5rem] border border-brand/5 p-6 lg:p-10 min-h-[70vh] shadow-xl relative overflow-hidden">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-12 pb-6 border-b border-brand/5">
-              <h2 className="font-serif text-2xl lg:text-3xl tracking-[0.2em] text-brand uppercase">{activeTab}</h2>
-              <button 
-                onClick={() => openModal()}
-                className="w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-4 bg-brand text-white rounded-2xl text-[10px] font-bold tracking-[0.3em] shadow-2xl hover:scale-105 hover:bg-brand-muted transition-all active:scale-95"
-              >
-                <Plus size={16} />
-                REGISTER NEW
-              </button>
+              <h2 className="font-serif text-2xl lg:text-3xl tracking-[0.2em] text-brand uppercase">{activeTab === 'page_settings' ? 'System Settings' : activeTab}</h2>
+              {activeTab !== 'page_settings' && (
+                <button 
+                  onClick={() => openModal()}
+                  className="w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-4 bg-brand text-white rounded-2xl text-[10px] font-bold tracking-[0.3em] shadow-2xl hover:scale-105 hover:bg-brand-muted transition-all active:scale-95"
+                >
+                  <Plus size={16} />
+                  REGISTER NEW
+                </button>
+              )}
             </div>
             
             {loading ? (
@@ -323,6 +343,34 @@ export default function AdminPage() {
               <div className="flex flex-col items-center justify-center py-32 opacity-20">
                 <Radio size={48} className="mb-4" />
                 <p className="font-serif tracking-widest text-sm uppercase">No Records Found</p>
+              </div>
+            ) : activeTab === 'page_settings' ? (
+              <div className="grid gap-6">
+                {data.map((item) => (
+                  <div key={item.id} className="group flex items-center justify-between p-8 rounded-2xl bg-white border border-brand/5 hover:border-accent-gold/30 transition-all">
+                    <div className="flex items-center gap-6">
+                      <div className="w-12 h-12 rounded-xl bg-brand/5 flex items-center justify-center text-brand/40">
+                        <Radio size={20} />
+                      </div>
+                      <div>
+                        <h3 className="font-serif text-lg tracking-widest text-brand">{item.label}</h3>
+                        <p className="text-[10px] text-brand/40 tracking-widest uppercase font-mono mt-1">Route: /{item.id === 'home' ? '' : item.id}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <span className={`text-[9px] font-bold tracking-widest uppercase ${item.is_public ? 'text-accent-gold' : 'text-brand/30'}`}>
+                        {item.is_public ? 'Public' : 'Private'}
+                      </span>
+                      <button
+                        onClick={() => handleToggleVisibility(item.id, !item.is_public)}
+                        disabled={operationLoading}
+                        className={`relative w-12 h-6 rounded-full transition-colors duration-300 focus:outline-none ${item.is_public ? 'bg-brand' : 'bg-brand/10'}`}
+                      >
+                        <div className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform duration-300 ${item.is_public ? 'translate-x-6' : 'translate-x-0'}`} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : (
               <div className="grid gap-6">

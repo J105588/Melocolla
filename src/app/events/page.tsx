@@ -3,6 +3,8 @@ import { Calendar, ExternalLink, Clock, CheckCircle2 } from 'lucide-react'
 import Link from 'next/link'
 import { Metadata } from 'next'
 import ScrollReveal from '@/components/animation/ScrollReveal'
+import { getPageVisibility, isAdmin } from '@/lib/page-visibility'
+import PrivatePageMessage from '@/components/layout/PrivatePageMessage'
 
 export const metadata: Metadata = {
   title: 'Events | Melocolla',
@@ -24,7 +26,11 @@ async function getEvents() {
 }
 
 export default async function EventsPage() {
-  const events = await getEvents()
+  const visibility = await getPageVisibility('events')
+  const admin = await isAdmin()
+  const isPrivate = visibility && !visibility.is_public && !admin
+  const events = isPrivate ? [] : await getEvents()
+
 
   return (
     <div className="container mx-auto px-6 py-24">
@@ -37,7 +43,9 @@ export default async function EventsPage() {
         </div>
       </ScrollReveal>
 
-      {events.length > 0 ? (
+      {isPrivate ? (
+        <PrivatePageMessage />
+      ) : events.length > 0 ? (
         <ScrollReveal stagger={0.15}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
             {events.map((event, i) => (
