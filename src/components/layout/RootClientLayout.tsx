@@ -7,6 +7,7 @@ import Header from '@/components/layout/Header'
 import PersistentPlayer from '@/components/layout/PersistentPlayer'
 import CinematicBackground from '@/components/layout/CinematicBackground'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 const OpeningAnimation = dynamic(() => import('@/components/animation/OpeningAnimation'), {
   ssr: false,
@@ -20,13 +21,21 @@ export default function RootClientLayout({
   const [isReady, setIsReady] = useState(false)
   const [showOpening, setShowOpening] = useState(false)
 
+  const pathname = usePathname()
+  const isXenogram = pathname === '/xenogram'
+
   useEffect(() => {
+    if (isXenogram) {
+      setShowOpening(false)
+      setIsReady(true)
+      return
+    }
     const openingSeen = sessionStorage.getItem('melocolla_opening_seen')
     if (!openingSeen) {
       setShowOpening(true)
     }
     setIsReady(true)
-  }, [])
+  }, [isXenogram])
 
   const handleOpeningComplete = () => {
     setShowOpening(false)
@@ -44,13 +53,14 @@ export default function RootClientLayout({
       {showOpening && <OpeningAnimation onComplete={handleOpeningComplete} />}
 
       <div className={`transition-opacity duration-[2000ms] ease-in-out ${showOpening ? 'opacity-0' : 'opacity-100'}`}>
-        <Header />
-        <main className="pt-24 min-h-screen">
+        {!isXenogram && <Header />}
+        <main className={`${!isXenogram ? 'pt-24' : ''} min-h-screen`}>
           {children}
         </main>
-        <PersistentPlayer />
+        {!isXenogram && <PersistentPlayer />}
 
-        <footer className="relative z-10 pt-24 pb-12 bg-[#f6f3f0]">
+        {!isXenogram && (
+          <footer className="relative z-10 pt-24 pb-12 bg-[#f6f3f0]">
           <div className="container mx-auto px-6 flex flex-col items-center">
             {/* Divider */}
             <div className="w-16 h-px bg-gradient-to-r from-transparent via-accent-gold/30 to-transparent mb-16" />
@@ -100,6 +110,7 @@ export default function RootClientLayout({
             </p>
           </div>
         </footer>
+        )}
       </div>
     </AudioProvider>
   )
