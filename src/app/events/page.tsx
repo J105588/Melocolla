@@ -7,7 +7,7 @@ import { getPageVisibility, isAdmin } from '@/lib/page-visibility'
 import PrivatePageMessage from '@/components/layout/PrivatePageMessage'
 
 export const metadata: Metadata = {
-  title: 'Events | Melocolla',
+  title: 'Events',
   description: 'Melocollaの最新イベント・投稿祭のスケジュール。',
 }
 

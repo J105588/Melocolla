@@ -7,7 +7,7 @@ import { getPageVisibility, isAdmin } from '@/lib/page-visibility'
 import PrivatePageMessage from '@/components/layout/PrivatePageMessage'
 
 export const metadata: Metadata = {
-  title: 'Discography | Melocolla',
+  title: 'Discography',
   description: 'Melocollaの音楽作品一覧。共鳴する感性が紡ぎ出す、最新のリリース情報。',
 }
 

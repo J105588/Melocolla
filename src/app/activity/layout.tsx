@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Activity | Melocolla',
+  title: 'Activity',
   description: 'Melocollaの活動報告一覧。',
 }
 
