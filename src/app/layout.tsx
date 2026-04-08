@@ -12,7 +12,7 @@ const notoSerif = Noto_Serif_JP({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Melocolla',
+    default: 'Melocolla 公式サイト',
     template: '%s | Melocolla'
   },
   description: '奏で、語り、共に創る。創作で繋がる共鳴の場所。',
