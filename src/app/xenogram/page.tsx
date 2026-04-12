@@ -4,7 +4,7 @@ import { ExternalLink } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'XENOGRAM',
-  description: 'ボカロP',
+  description: 'Melocollaサークル運営・ボカロP',
 }
 
 const LINKS = [
