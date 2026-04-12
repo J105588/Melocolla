@@ -48,7 +48,7 @@ export default function XenogramPage() {
               XENOGRAM<span className="text-accent-gold">.</span>
             </h1>
             <p className="text-[10px] uppercase tracking-[0.3em] text-brand/50 font-bold mb-8">
-              ボカロP
+              Melocollaサークル運営・ボカロP
             </p>
 
             <div className="w-8 h-px bg-accent-gold/30 mb-8" />
