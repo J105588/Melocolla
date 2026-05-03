@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useState, useRef } from 'react'
+import { usePathname } from 'next/navigation'
 import gsap from 'gsap'
 
 const navItems = [
@@ -13,6 +14,9 @@ const navItems = [
 ]
 
 export default function Header() {
+  const pathname = usePathname()
+  const isMemberProfile = pathname.startsWith('/members/') && pathname !== '/members'
+  
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const overlayRef = useRef<HTMLDivElement>(null)
@@ -70,56 +74,60 @@ export default function Header() {
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-10">
-          {navItems.map((item) => (
-            <Link
-              key={item.name}
-              href={item.path}
-              className="text-[13px] font-medium tracking-[0.2em] text-brand/75 hover:text-brand transition-colors duration-500 relative group uppercase"
-            >
-              {item.name}
-              <span className="absolute -bottom-1 left-0 w-0 h-px bg-accent-gold transition-all duration-500 ease-out group-hover:w-full" />
-            </Link>
-          ))}
-        </nav>
+        {!isMemberProfile && (
+          <nav className="hidden md:flex items-center gap-10">
+            {navItems.map((item) => (
+              <Link
+                key={item.name}
+                href={item.path}
+                className="text-[13px] font-medium tracking-[0.2em] text-brand/75 hover:text-brand transition-colors duration-500 relative group uppercase"
+              >
+                {item.name}
+                <span className="absolute -bottom-1 left-0 w-0 h-px bg-accent-gold transition-all duration-500 ease-out group-hover:w-full" />
+              </Link>
+            ))}
+          </nav>
+        )}
 
         {/* Mobile Hamburger — absolute positioned lines for perfect X centering */}
-        <button
-          className="md:hidden w-10 h-10 flex items-center justify-center relative z-[103]"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          aria-label="Toggle Menu"
-        >
-          <div className="relative w-6 h-4">
-            {/* Top line → rotates to form top-left to bottom-right diagonal */}
-            <span
-              className="absolute left-0 h-[1.5px] bg-brand transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
-              style={{
-                width: '100%',
-                top: isMenuOpen ? '50%' : '0',
-                transform: isMenuOpen ? 'translateY(-50%) rotate(45deg)' : 'none',
-              }}
-            />
-            {/* Middle line → fades out */}
-            <span
-              className="absolute left-0 h-[1.5px] bg-brand transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
-              style={{
-                width: isMenuOpen ? '0%' : '60%',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                opacity: isMenuOpen ? 0 : 1,
-              }}
-            />
-            {/* Bottom line → rotates to form bottom-left to top-right diagonal */}
-            <span
-              className="absolute left-0 h-[1.5px] bg-brand transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
-              style={{
-                width: '100%',
-                top: isMenuOpen ? '50%' : '100%',
-                transform: isMenuOpen ? 'translateY(-50%) rotate(-45deg)' : 'translateY(-100%)',
-              }}
-            />
-          </div>
-        </button>
+        {!isMemberProfile && (
+          <button
+            className="md:hidden w-10 h-10 flex items-center justify-center relative z-[103]"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle Menu"
+          >
+            <div className="relative w-6 h-4">
+              {/* Top line → rotates to form top-left to bottom-right diagonal */}
+              <span
+                className="absolute left-0 h-[1.5px] bg-brand transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
+                style={{
+                  width: '100%',
+                  top: isMenuOpen ? '50%' : '0',
+                  transform: isMenuOpen ? 'translateY(-50%) rotate(45deg)' : 'none',
+                }}
+              />
+              {/* Middle line → fades out */}
+              <span
+                className="absolute left-0 h-[1.5px] bg-brand transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
+                style={{
+                  width: isMenuOpen ? '0%' : '60%',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  opacity: isMenuOpen ? 0 : 1,
+                }}
+              />
+              {/* Bottom line → rotates to form bottom-left to top-right diagonal */}
+              <span
+                className="absolute left-0 h-[1.5px] bg-brand transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
+                style={{
+                  width: '100%',
+                  top: isMenuOpen ? '50%' : '100%',
+                  transform: isMemberProfile ? 'none' : (isMenuOpen ? 'translateY(-50%) rotate(-45deg)' : 'translateY(-100%)'),
+                }}
+              />
+            </div>
+          </button>
+        )}
       </div>
 
       {/* Mobile Overlay — controlled entirely by GSAP */}

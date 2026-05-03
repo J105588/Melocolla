@@ -181,6 +181,10 @@ export default function AdminPage() {
         delete payload.title
         // Ensure sort_order is a number
         payload.sort_order = parseInt(payload.sort_order as string || '0', 10)
+        // Handle empty slug
+        if (!payload.slug) {
+          payload.slug = null
+        }
       } else if (activeTab === 'events') {
         payload.event_name = payload.title || editingItem?.event_name || ''
         delete payload.title
@@ -495,6 +499,10 @@ export default function AdminPage() {
                          <label className="text-[10px] font-bold tracking-widest text-brand/40 uppercase px-1">Display Priority (Lower = First)</label>
                          <input name="sort_order" type="number" defaultValue={editingItem?.sort_order || 0} className="w-full p-4 rounded-xl bg-brand/5 border-none outline-none" />
                       </div>
+                    </div>
+                    <div className="space-y-2">
+                       <label className="text-[10px] font-bold tracking-widest text-brand/40 uppercase px-1">URL Identifier (Slug) - /members/[slug]</label>
+                       <input name="slug" defaultValue={editingItem?.slug} placeholder="e.g. xenogram" className="w-full p-4 rounded-xl bg-brand/5 border-none outline-none text-sm font-mono" />
                     </div>
                     <div className="space-y-2">
                        <label className="text-[10px] font-bold tracking-widest text-brand/40 uppercase px-1">Creator Biography</label>

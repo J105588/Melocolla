@@ -22,10 +22,10 @@ export default function RootClientLayout({
   const [showOpening, setShowOpening] = useState(false)
 
   const pathname = usePathname()
-  const isXenogram = pathname === '/xenogram'
+  const isMemberProfile = pathname.startsWith('/members/') && pathname !== '/members'
 
   useEffect(() => {
-    if (isXenogram) {
+    if (isMemberProfile) {
       setShowOpening(false)
       setIsReady(true)
       return
@@ -35,7 +35,7 @@ export default function RootClientLayout({
       setShowOpening(true)
     }
     setIsReady(true)
-  }, [isXenogram])
+  }, [isMemberProfile])
 
   const handleOpeningComplete = () => {
     setShowOpening(false)
@@ -53,14 +53,13 @@ export default function RootClientLayout({
       {showOpening && <OpeningAnimation onComplete={handleOpeningComplete} />}
 
       <div className={`transition-opacity duration-[2000ms] ease-in-out ${showOpening ? 'opacity-0' : 'opacity-100'}`}>
-        {!isXenogram && <Header />}
-        <main className={`${!isXenogram ? 'pt-24' : ''} min-h-screen`}>
+        <Header />
+        <main className={`${!isMemberProfile ? 'pt-24' : ''} min-h-screen`}>
           {children}
         </main>
-        {!isXenogram && <PersistentPlayer />}
+        {!isMemberProfile && <PersistentPlayer />}
 
-        {!isXenogram && (
-          <footer className="relative z-10 pt-24 pb-12 bg-[#f6f3f0]">
+        <footer className="relative z-10 pt-24 pb-12 bg-[#f6f3f0]">
           <div className="container mx-auto px-6 flex flex-col items-center">
             {/* Divider */}
             <div className="w-16 h-px bg-gradient-to-r from-transparent via-accent-gold/30 to-transparent mb-16" />
@@ -110,7 +109,6 @@ export default function RootClientLayout({
             </p>
           </div>
         </footer>
-        )}
       </div>
     </AudioProvider>
   )

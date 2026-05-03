@@ -25,6 +25,7 @@ export type Member = {
   bio: string
   sns_links: { platform: string; url: string }[]
   sort_order: number
+  slug?: string
 }
 
 export type Event = {

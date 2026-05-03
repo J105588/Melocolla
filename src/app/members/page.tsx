@@ -4,6 +4,7 @@ import { Metadata } from 'next'
 import ScrollReveal from '@/components/animation/ScrollReveal'
 import { getPageVisibility, isAdmin } from '@/lib/page-visibility'
 import PrivatePageMessage from '@/components/layout/PrivatePageMessage'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Members',
@@ -64,6 +65,8 @@ export default async function MembersPage() {
 }
 
 function MemberCard({ member, index }: { member: Member, index: number }) {
+  const profileUrl = member.slug ? `/members/${member.slug}` : null
+
   return (
     <div
       className="group flex flex-col items-center text-center"
@@ -71,7 +74,21 @@ function MemberCard({ member, index }: { member: Member, index: number }) {
       <div className="relative w-40 h-40 mb-8">
         <div className="absolute inset-0 rounded-full border border-brand/10 group-hover:scale-110 transition-transform duration-700" />
         <div className="absolute inset-2 rounded-full overflow-hidden bg-brand/5 shadow-inner">
-          {member.avatar_url ? (
+          {profileUrl ? (
+            <Link href={profileUrl}>
+              {member.avatar_url ? (
+                <img
+                  src={member.avatar_url}
+                  alt={member.name}
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-brand/20">
+                  <Users size={48} strokeWidth={1} />
+                </div>
+              )}
+            </Link>
+          ) : member.avatar_url ? (
             <img
               src={member.avatar_url}
               alt={member.name}
@@ -86,7 +103,13 @@ function MemberCard({ member, index }: { member: Member, index: number }) {
       </div>
 
       <div className="flex flex-col gap-2">
-        <h3 className="font-serif text-2xl tracking-widest text-brand">{member.name}</h3>
+        {profileUrl ? (
+          <Link href={profileUrl}>
+            <h3 className="font-serif text-2xl tracking-widest text-brand hover:text-accent-gold transition-colors">{member.name}</h3>
+          </Link>
+        ) : (
+          <h3 className="font-serif text-2xl tracking-widest text-brand">{member.name}</h3>
+        )}
         <p className="text-xs uppercase tracking-widest text-brand-muted font-bold">{member.role}</p>
         <p className="mt-4 text-sm text-brand/60 leading-relaxed max-w-xs whitespace-pre-wrap">{member.bio}</p>
 
