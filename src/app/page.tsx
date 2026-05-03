@@ -107,7 +107,7 @@ export default async function Home() {
 
                       <div className="mt-6">
                         <Link
-                          href="https://discord.gg/qvnm4b9ACw"
+                          href="https://discord.gg/ZqRvGpnZDr"
                           target="_blank"
                           className="inline-flex items-center gap-6 px-14 py-4 border border-brand/8 text-brand/75 rounded-full hover:bg-brand hover:text-white hover:border-brand transition-all duration-700 tracking-[0.3em] font-bold text-[11px] group/btn"
                         >

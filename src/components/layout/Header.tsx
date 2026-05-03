@@ -11,6 +11,7 @@ const navItems = [
   { name: 'Discography', path: '/discography' },
   { name: 'Members', path: '/members' },
   { name: 'Events', path: '/events' },
+  { name: 'Contact', path: '/contact' },
 ]
 
 export default function Header() {

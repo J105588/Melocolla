@@ -73,7 +73,7 @@ export default function RootClientLayout({
             </p>
 
             <nav className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 md:gap-12 mb-12 max-w-sm md:max-w-none">
-              {['Home', 'Activity', 'Discography', 'Members', 'Events', 'Terms'].map(item => (
+              {['Home', 'Activity', 'Discography', 'Members', 'Events', 'Terms', 'Contact'].map(item => (
                 <Link
                   key={item}
                   href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
