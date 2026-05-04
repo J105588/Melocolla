@@ -5,8 +5,8 @@ import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Join the Circle',
-  description: 'Melocollaへのメンバー参加申請。',
+  title: 'Apply to Melocolla',
+  description: 'Melocollaへのメンバー登録申請。',
 }
 
 export default function ApplyPage() {
@@ -23,8 +23,8 @@ export default function ApplyPage() {
           </h1>
           <div className="w-12 h-px bg-gradient-to-r from-transparent via-accent-gold to-transparent mb-8" />
           <p className="text-sm text-brand/50 tracking-widest leading-relaxed max-w-xl">
-            Melocollaでは、共に響き合い、新しい価値を創造するクリエイターを募集しています。<br />
-            以下のフォームに必要事項を記入し、申請を行ってください。
+            本フォームでは公式サイトに掲載するメンバー情報の収集をしています。<br />
+            以下のフォームに必要事項を記入し、登録を行ってください。
           </p>
         </div>
       </ScrollReveal>
