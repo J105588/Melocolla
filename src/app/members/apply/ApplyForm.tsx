@@ -66,7 +66,7 @@ export default function ApplyForm() {
           </div>
 
           <div className="space-y-3">
-            <label className="text-[10px] font-bold tracking-widest text-brand/40 uppercase px-1">Email / 連絡先メールアドレス <span className="text-accent-gold">*</span></label>
+            <label className="text-[10px] font-bold tracking-widest text-brand/40 uppercase px-1">Email / 連絡先メールアドレス</label>
             <input name="email" type="email" placeholder="your@email.com" className="w-full px-6 py-4 rounded-2xl bg-brand/5 border border-transparent focus:border-accent-gold outline-none transition-all text-sm" />
             <p className="text-[9px] text-brand/30 px-1 leading-relaxed">管理者からの連絡に使用します。公開はされません。</p>
           </div>
@@ -169,3 +169,4 @@ export default function ApplyForm() {
     </div>
   )
 }
+
