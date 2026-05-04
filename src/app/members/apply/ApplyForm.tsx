@@ -28,7 +28,7 @@ export default function ApplyForm() {
 
     if (response.success) {
       setResult({ success: true, message: '申請を受け付けました。管理者が内容を確認後、登録が完了しましたらご連絡いたします。' })
-      ;(e.target as HTMLFormElement).reset()
+        ; (e.target as HTMLFormElement).reset()
       setSnsLinks([{ platform: '', url: '' }])
       window.scrollTo({ top: 0, behavior: 'smooth' })
     } else {
@@ -40,9 +40,8 @@ export default function ApplyForm() {
   return (
     <div className="bg-white/40 backdrop-blur-xl border border-brand/5 p-8 md:p-12 rounded-[2.5rem] shadow-xl relative overflow-hidden">
       {result && (
-        <div className={`mb-10 p-6 rounded-2xl flex items-start gap-4 animate-in fade-in slide-in-from-top-2 duration-500 ${
-          result.success ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'
-        }`}>
+        <div className={`mb-10 p-6 rounded-2xl flex items-start gap-4 animate-in fade-in slide-in-from-top-2 duration-500 ${result.success ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'
+          }`}>
           {result.success ? <CheckCircle2 size={20} className="mt-1 flex-shrink-0" /> : <AlertCircle size={20} className="mt-1 flex-shrink-0" />}
           <p className="text-sm font-medium leading-relaxed">{result.message}</p>
         </div>
@@ -52,7 +51,7 @@ export default function ApplyForm() {
         {/* 基本情報 */}
         <div className="space-y-8">
           <h3 className="text-[10px] font-bold tracking-[0.4em] text-accent-gold uppercase border-b border-brand/5 pb-4">Basic Information / 基本情報</h3>
-          
+
           <div className="grid sm:grid-cols-2 gap-8">
             <div className="space-y-3">
               <label className="text-[10px] font-bold tracking-widest text-brand/40 uppercase px-1">Name / 活動名 <span className="text-accent-gold">*</span></label>
@@ -76,7 +75,7 @@ export default function ApplyForm() {
         {/* プロフィール詳細 */}
         <div className="space-y-8">
           <h3 className="text-[10px] font-bold tracking-[0.4em] text-accent-gold uppercase border-b border-brand/5 pb-4">Profile Details / プロフィール</h3>
-          
+
           <div className="space-y-3">
             <label className="text-[10px] font-bold tracking-widest text-brand/40 uppercase px-1">Role / ロール・担当 <span className="text-accent-gold">*</span></label>
             <input name="role" type="text" placeholder="例: Composer, Vocalist, Illustrator" className="w-full px-6 py-4 rounded-2xl bg-brand/5 border border-transparent focus:border-accent-gold outline-none transition-all text-sm" required />
@@ -92,7 +91,7 @@ export default function ApplyForm() {
           <div className="space-y-3">
             <label className="text-[10px] font-bold tracking-widest text-brand/40 uppercase px-1">Requested URL Slug / 希望URL識別子</label>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] text-brand/30 font-mono">melocolla.jp/members/</span>
+              <span className="text-[10px] text-brand/30 font-mono">melocolla.vercel.app/members/</span>
               <input name="slug" type="text" placeholder="example-name" className="flex-1 px-6 py-4 rounded-2xl bg-brand/5 border border-transparent focus:border-accent-gold outline-none transition-all text-sm font-mono" />
             </div>
             <p className="text-[9px] text-brand/30 px-1 leading-relaxed">個別ページのURLに使用されます。半角英数字とハイフンのみ使用可能です。</p>
@@ -107,24 +106,24 @@ export default function ApplyForm() {
               <Plus size={12} /> ADD LINK
             </button>
           </div>
-          
+
           <div className="space-y-4">
             {snsLinks.map((link, index) => (
               <div key={index} className="flex gap-4 items-start animate-in fade-in slide-in-from-left-2 duration-300">
                 <div className="w-1/3 space-y-2">
-                  <input 
-                    name={`sns_platform_${index}`} 
-                    type="text" 
-                    placeholder="Platform (X, YouTube...)" 
-                    className="w-full px-4 py-3 rounded-xl bg-brand/5 border border-transparent focus:border-accent-gold outline-none text-xs" 
+                  <input
+                    name={`sns_platform_${index}`}
+                    type="text"
+                    placeholder="Platform (X, YouTube...)"
+                    className="w-full px-4 py-3 rounded-xl bg-brand/5 border border-transparent focus:border-accent-gold outline-none text-xs"
                   />
                 </div>
                 <div className="flex-1 space-y-2">
-                  <input 
-                    name={`sns_url_${index}`} 
-                    type="url" 
-                    placeholder="https://..." 
-                    className="w-full px-4 py-3 rounded-xl bg-brand/5 border border-transparent focus:border-accent-gold outline-none text-xs" 
+                  <input
+                    name={`sns_url_${index}`}
+                    type="url"
+                    placeholder="https://..."
+                    className="w-full px-4 py-3 rounded-xl bg-brand/5 border border-transparent focus:border-accent-gold outline-none text-xs"
                   />
                 </div>
                 {index > 0 && (
@@ -153,8 +152,8 @@ export default function ApplyForm() {
             </div>
           </label>
 
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             disabled={pending}
             className="w-full py-5 bg-brand text-white rounded-2xl font-bold tracking-[0.3em] text-[11px] hover:bg-brand-muted hover:shadow-[0_15px_35px_rgba(96,62,68,0.2)] transition-all flex items-center justify-center gap-4 group disabled:opacity-50 disabled:hover:scale-100 active:scale-95"
           >
