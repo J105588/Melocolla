@@ -27,6 +27,7 @@ export type Member = {
   sort_order: number
   furigana?: string
   slug?: string
+  is_public: boolean
 }
 
 export type Event = {

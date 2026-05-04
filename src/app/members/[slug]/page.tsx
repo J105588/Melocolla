@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation'
 import { supabase, Member } from '@/lib/supabase'
 import ScrollReveal from '@/components/animation/ScrollReveal'
 import { ExternalLink } from 'lucide-react'
+import { isAdmin } from '@/lib/page-visibility'
+import PrivatePageMessage from '@/components/layout/PrivatePageMessage'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -13,7 +15,6 @@ async function getMemberBySlug(slug: string) {
     .from('members')
     .select('*')
     .eq('slug', slug)
-    .eq('is_public', true)
     .single()
 
   if (error || !data) {
@@ -40,10 +41,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function MemberProfilePage({ params }: Props) {
   const { slug } = await params
+  const admin = await isAdmin()
   const member = await getMemberBySlug(slug)
 
   if (!member) {
     notFound()
+  }
+
+  // 個別の is_public 設定に基づいてアクセス制限
+  if (!member.is_public && !admin) {
+    return (
+      <div className="container mx-auto px-6 py-32">
+        <PrivatePageMessage />
+      </div>
+    )
   }
 
   return (
@@ -119,7 +130,7 @@ export default async function MemberProfilePage({ params }: Props) {
         <ScrollReveal direction="up" delay={0.5}>
           <div className="flex flex-col items-center">
             <p className="text-[10px] tracking-[0.3em] text-brand/30 uppercase">
-              &copy; {new Date().getFullYear()} {member.name} & Melocolla. All Rights Reserved.
+              &copy; {new Date().getFullYear()} Melocolla. All Rights Reserved.
             </p>
           </div>
         </ScrollReveal>

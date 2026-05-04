@@ -8,7 +8,24 @@ import Link from 'next/link'
 export default function ApplyForm() {
   const [pending, setPending] = useState(false)
   const [result, setResult] = useState<{ success: boolean; message: string } | null>(null)
+  const [iconPreview, setIconPreview] = useState<string | null>(null)
   const [snsLinks, setSnsLinks] = useState([{ platform: '', url: '' }])
+
+  const handleIconChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      // 2MB size limit
+      if (file.size > 2 * 1024 * 1024) {
+        alert('ファイルサイズが大きすぎます（2MB以下にしてください）。')
+        e.target.value = ''
+        setIconPreview(null)
+        return
+      }
+      const reader = new FileReader()
+      reader.onloadend = () => setIconPreview(reader.result as string)
+      reader.readAsDataURL(file)
+    }
+  }
 
   const addSns = () => {
     if (snsLinks.length < 5) setSnsLinks([...snsLinks, { platform: '', url: '' }])
@@ -30,6 +47,7 @@ export default function ApplyForm() {
       setResult({ success: true, message: '申請を受け付けました。管理者が内容を確認後、登録が完了しましたらご連絡いたします。' })
         ; (e.target as HTMLFormElement).reset()
       setSnsLinks([{ platform: '', url: '' }])
+      setIconPreview(null)
       window.scrollTo({ top: 0, behavior: 'smooth' })
     } else {
       setResult({ success: false, message: response.error || 'エラーが発生しました。' })
@@ -52,6 +70,31 @@ export default function ApplyForm() {
         <div className="space-y-8">
           <h3 className="text-[10px] font-bold tracking-[0.4em] text-accent-gold uppercase border-b border-brand/5 pb-4">Basic Information / 基本情報</h3>
 
+          <div className="space-y-3">
+            <label className="text-[10px] font-bold tracking-widest text-brand/40 uppercase px-1">Icon / アイコン <span className="text-accent-gold">*</span></label>
+            <div className="flex items-center gap-6 p-6 rounded-2xl bg-brand/5 border border-transparent hover:border-accent-gold/20 transition-all max-w-md">
+              <div className="relative group w-20 h-20 rounded-2xl bg-brand/10 overflow-hidden flex items-center justify-center flex-shrink-0">
+                {iconPreview ? (
+                  <img src={iconPreview} alt="Preview" className="w-full h-full object-cover" />
+                ) : (
+                  <Plus size={24} className="text-brand/20 group-hover:text-accent-gold transition-colors" />
+                )}
+                <input
+                  name="icon"
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/gif,image/avif,image/heic,image/heif"
+                  onChange={handleIconChange}
+                  required
+                  className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                />
+              </div>
+              <div className="flex-1 space-y-1">
+                <p className="text-[10px] font-bold text-brand/60 uppercase">Select Image</p>
+                <p className="text-[9px] text-brand/30 leading-relaxed">正方形の画像（JPG, PNG, WebP, AVIF, HEIC）を推奨します。</p>
+              </div>
+            </div>
+          </div>
+
           <div className="grid sm:grid-cols-2 gap-8">
             <div className="space-y-3">
               <label className="text-[10px] font-bold tracking-widest text-brand/40 uppercase px-1">Name / 活動名 <span className="text-accent-gold">*</span></label>
@@ -66,7 +109,7 @@ export default function ApplyForm() {
           </div>
 
           <div className="space-y-3">
-            <label className="text-[10px] font-bold tracking-widest text-brand/40 uppercase px-1">Email / 連絡先メールアドレス</label>
+            <label className="text-[10px] font-bold tracking-widest text-brand/40 uppercase px-1">Email / 連絡先メールアドレス <span className="text-brand/20 ml-1">(Optional)</span></label>
             <input name="email" type="email" placeholder="your@email.com" className="w-full px-6 py-4 rounded-2xl bg-brand/5 border border-transparent focus:border-accent-gold outline-none transition-all text-sm" />
             <p className="text-[9px] text-brand/30 px-1 leading-relaxed">管理者からの連絡に使用します。公開はされません。</p>
           </div>
@@ -83,13 +126,13 @@ export default function ApplyForm() {
           </div>
 
           <div className="space-y-3">
-            <label className="text-[10px] font-bold tracking-widest text-brand/40 uppercase px-1">Bio / 自己紹介</label>
+            <label className="text-[10px] font-bold tracking-widest text-brand/40 uppercase px-1">Bio / 自己紹介 <span className="text-brand/20 ml-1">(Optional)</span></label>
             <textarea name="bio" placeholder="あなたの活動内容や実績、メッセージなど。" rows={5} className="w-full px-6 py-5 rounded-2xl bg-brand/5 border border-transparent focus:border-accent-gold outline-none transition-all text-sm resize-none" />
             <p className="text-[9px] text-brand/30 px-1 leading-relaxed">個別ページに掲載される紹介文です。100〜300文字程度を推奨します。</p>
           </div>
 
           <div className="space-y-3">
-            <label className="text-[10px] font-bold tracking-widest text-brand/40 uppercase px-1">Requested URL Slug / 希望URL識別子</label>
+            <label className="text-[10px] font-bold tracking-widest text-brand/40 uppercase px-1">Requested URL Slug / 希望URL識別子 <span className="text-brand/20 ml-1">(Optional)</span></label>
             <div className="flex items-center gap-2">
               <span className="text-[10px] text-brand/30 font-mono">melocolla.vercel.app/members/</span>
               <input name="slug" type="text" placeholder="example-name" className="flex-1 px-6 py-4 rounded-2xl bg-brand/5 border border-transparent focus:border-accent-gold outline-none transition-all text-sm font-mono" />

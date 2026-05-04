@@ -103,6 +103,7 @@ export default function AdminPage() {
         name: application.name,
         furigana: application.furigana,
         role: application.role,
+        avatar_url: application.avatar_url,
         bio: application.bio,
         sns_links: application.sns_links,
         slug: application.slug,
@@ -434,8 +435,12 @@ export default function AdminPage() {
                   <div key={item.id} className="group flex flex-col p-8 rounded-2xl bg-white border border-brand/5 hover:border-accent-gold/30 transition-all gap-6">
                     <div className="flex justify-between items-start">
                       <div className="flex items-center gap-6">
-                        <div className="w-16 h-16 rounded-xl bg-brand/5 flex items-center justify-center text-brand/20">
-                          <Users size={32} />
+                        <div className="w-16 h-16 rounded-xl bg-brand/5 flex items-center justify-center text-brand/20 overflow-hidden">
+                          {item.avatar_url ? (
+                            <img src={item.avatar_url} alt="" className="w-full h-full object-cover" />
+                          ) : (
+                            <Users size={32} />
+                          )}
                         </div>
                         <div>
                           <div className="flex items-center gap-3">
@@ -468,7 +473,7 @@ export default function AdminPage() {
                       <div className="space-y-4">
                         <div>
                           <p className="text-[8px] text-brand/40 tracking-widest uppercase font-bold mb-1">Contact Email</p>
-                          <p className="text-xs text-brand/60">{item.email}</p>
+                          <p className="text-xs text-brand/60">{item.email || '未設定'}</p>
                         </div>
                         <div>
                           <p className="text-[8px] text-brand/40 tracking-widest uppercase font-bold mb-1">SNS Links</p>
