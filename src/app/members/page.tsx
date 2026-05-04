@@ -17,7 +17,7 @@ async function getMembers() {
     .select('*')
     .eq('is_public', true)
     .order('sort_order', { ascending: true })
-    .order('name', { ascending: true })
+    .order('furigana', { ascending: true })
 
   if (error) {
     console.error('Error fetching members:', error)

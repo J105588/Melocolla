@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase'
 import { 
   Music, Users, Calendar, LogOut, Plus, Edit, Trash2, 
   Save, X, Radio, Newspaper, Upload, Link as LinkIcon, 
-  ChevronRight, Menu, Loader2, Eye, Edit3, Settings
+  ChevronRight, Menu, Loader2, Eye, Edit3, Settings, CheckCircle2
 } from 'lucide-react'
 import RichTextEditor from '@/components/admin/RichTextEditor'
 
@@ -18,7 +18,7 @@ export default function AdminPage() {
   const [operationLoading, setOperationLoading] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [activeTab, setActiveTab] = useState<'discography' | 'members' | 'events' | 'activities' | 'page_settings'>('discography')
+  const [activeTab, setActiveTab] = useState<'discography' | 'members' | 'events' | 'activities' | 'page_settings' | 'applications'>('discography')
   const [data, setData] = useState<any[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<any>(null)
@@ -75,10 +75,13 @@ export default function AdminPage() {
 
   const fetchData = async () => {
     setLoading(true)
-    let query = supabase.from(activeTab).select('*')
+    const tableName = activeTab === 'applications' ? 'member_applications' : activeTab
+    let query = supabase.from(tableName).select('*')
     
     if (activeTab === 'page_settings') {
       query = query.order('id', { ascending: true })
+    } else if (activeTab === 'applications') {
+      query = query.order('status', { ascending: false }).order('created_at', { ascending: false })
     } else {
       query = query.order('created_at', { ascending: false })
     }
@@ -88,6 +91,54 @@ export default function AdminPage() {
     if (error) console.error(error)
     else setData(data || [])
     setLoading(false)
+  }
+
+  const handleApprove = async (application: any) => {
+    if (!confirm(`${application.name} 様を正式メンバーとして登録しますか？`)) return
+    setOperationLoading(true)
+    
+    try {
+      // 1. Insert into members table
+      const { error: memberError } = await supabase.from('members').insert({
+        name: application.name,
+        furigana: application.furigana,
+        role: application.role,
+        bio: application.bio,
+        sns_links: application.sns_links,
+        slug: application.slug,
+        sort_order: 2, // 新規申請者は一律2
+        is_public: true
+      })
+
+      if (memberError) throw memberError
+
+      // 2. Update application status
+      const { error: appError } = await supabase
+        .from('member_applications')
+        .update({ status: 'approved' })
+        .eq('id', application.id)
+
+      if (appError) throw appError
+
+      fetchData()
+    } catch (error: any) {
+      alert('Error: ' + error.message)
+    } finally {
+      setOperationLoading(false)
+    }
+  }
+
+  const handleReject = async (id: string) => {
+    if (!confirm('この申請を却下しますか？')) return
+    setOperationLoading(true)
+    const { error } = await supabase
+      .from('member_applications')
+      .update({ status: 'rejected' })
+      .eq('id', id)
+    
+    if (error) alert(error.message)
+    else fetchData()
+    setOperationLoading(false)
   }
 
   const handleToggleVisibility = async (id: string, isPublic: boolean) => {
@@ -312,6 +363,7 @@ export default function AdminPage() {
             <TabButton active={activeTab === 'members'} onClick={() => { setActiveTab('members'); setIsSidebarOpen(false); }} icon={<Users size={18} />} label="CREATORS" />
             <TabButton active={activeTab === 'events'} onClick={() => { setActiveTab('events'); setIsSidebarOpen(false); }} icon={<Calendar size={18} />} label="STREAMS" />
             <TabButton active={activeTab === 'activities'} onClick={() => { setActiveTab('activities'); setIsSidebarOpen(false); }} icon={<Newspaper size={18} />} label="ACTIVITY" />
+            <TabButton active={activeTab === 'applications'} onClick={() => { setActiveTab('applications'); setIsSidebarOpen(false); }} icon={<Users size={18} className="text-accent-gold" />} label="APPLICATIONS" />
             <TabButton active={activeTab === 'page_settings'} onClick={() => { setActiveTab('page_settings'); setIsSidebarOpen(false); }} icon={<Settings size={18} />} label="SETTINGS" />
             
             <div className="mt-12 p-6 rounded-3xl bg-accent-gold/5 border border-accent-gold/10">
@@ -329,8 +381,8 @@ export default function AdminPage() {
           {/* Content */}
           <main className="flex-1 bg-white/40 backdrop-blur-xl rounded-[2.5rem] border border-brand/5 p-6 lg:p-10 min-h-[70vh] shadow-xl relative overflow-hidden">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-12 pb-6 border-b border-brand/5">
-              <h2 className="font-serif text-2xl lg:text-3xl tracking-[0.2em] text-brand uppercase">{activeTab === 'page_settings' ? 'System Settings' : activeTab}</h2>
-              {activeTab !== 'page_settings' && (
+              <h2 className="font-serif text-2xl lg:text-3xl tracking-[0.2em] text-brand uppercase">{activeTab === 'page_settings' ? 'System Settings' : (activeTab === 'applications' ? 'Member Applications' : activeTab)}</h2>
+              {activeTab !== 'page_settings' && activeTab !== 'applications' && (
                 <button 
                   onClick={() => openModal()}
                   className="w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-4 bg-brand text-white rounded-2xl text-[10px] font-bold tracking-[0.3em] shadow-2xl hover:scale-105 hover:bg-brand-muted transition-all active:scale-95"
@@ -373,6 +425,82 @@ export default function AdminPage() {
                         <div className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform duration-300 ${item.is_public ? 'translate-x-6' : 'translate-x-0'}`} />
                       </button>
                     </div>
+                  </div>
+                ))}
+              </div>
+            ) : activeTab === 'applications' ? (
+              <div className="grid gap-6">
+                {data.map((item) => (
+                  <div key={item.id} className="group flex flex-col p-8 rounded-2xl bg-white border border-brand/5 hover:border-accent-gold/30 transition-all gap-6">
+                    <div className="flex justify-between items-start">
+                      <div className="flex items-center gap-6">
+                        <div className="w-16 h-16 rounded-xl bg-brand/5 flex items-center justify-center text-brand/20">
+                          <Users size={32} />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-3">
+                            <h3 className="font-serif text-lg tracking-widest text-brand">{item.name}</h3>
+                            <span className="text-[10px] text-brand/30">({item.furigana})</span>
+                          </div>
+                          <p className="text-[10px] text-accent-gold tracking-widest uppercase font-bold mt-1">{item.role}</p>
+                        </div>
+                      </div>
+                      <div className={`px-4 py-1.5 rounded-full text-[8px] font-bold tracking-[0.2em] uppercase ${
+                        item.status === 'approved' ? 'bg-green-50 text-green-600' :
+                        item.status === 'rejected' ? 'bg-red-50 text-red-600' :
+                        'bg-blue-50 text-blue-600 animate-pulse'
+                      }`}>
+                        {item.status}
+                      </div>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-8 py-6 border-y border-brand/5">
+                      <div className="space-y-4">
+                        <div>
+                          <p className="text-[8px] text-brand/40 tracking-widest uppercase font-bold mb-1">Biography</p>
+                          <p className="text-xs text-brand/70 leading-relaxed whitespace-pre-wrap">{item.bio || '未設定'}</p>
+                        </div>
+                        <div>
+                          <p className="text-[8px] text-brand/40 tracking-widest uppercase font-bold mb-1">Requested Slug</p>
+                          <p className="text-xs font-mono text-brand/60">/members/{item.slug || '(none)'}</p>
+                        </div>
+                      </div>
+                      <div className="space-y-4">
+                        <div>
+                          <p className="text-[8px] text-brand/40 tracking-widest uppercase font-bold mb-1">Contact Email</p>
+                          <p className="text-xs text-brand/60">{item.email}</p>
+                        </div>
+                        <div>
+                          <p className="text-[8px] text-brand/40 tracking-widest uppercase font-bold mb-1">SNS Links</p>
+                          <div className="flex flex-wrap gap-2 mt-2">
+                            {item.sns_links?.map((sns: any, i: number) => (
+                              <span key={i} className="px-2 py-1 bg-brand/5 rounded text-[8px] text-brand/50">
+                                {sns.platform}: {sns.url}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {item.status === 'pending' && (
+                      <div className="flex gap-4">
+                        <button 
+                          onClick={() => handleApprove(item)}
+                          disabled={operationLoading}
+                          className="flex-1 py-4 bg-brand text-white rounded-xl text-[10px] font-bold tracking-[0.2em] hover:bg-brand-muted transition-all flex items-center justify-center gap-2"
+                        >
+                          <CheckCircle2 size={14} /> APPROVE & REGISTER
+                        </button>
+                        <button 
+                          onClick={() => handleReject(item.id)}
+                          disabled={operationLoading}
+                          className="px-8 py-4 border border-brand/10 rounded-xl text-[10px] font-bold tracking-[0.2em] text-brand/40 hover:text-red-500 hover:border-red-200 transition-all uppercase"
+                        >
+                          REJECT
+                        </button>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
