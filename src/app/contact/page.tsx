@@ -41,7 +41,7 @@ export default async function ContactPage() {
 
       <div className="mt-16 text-center">
         <p className="text-[9px] text-brand/30 tracking-[0.4em] uppercase font-bold">
-          Melocolla Relations System
+          Melocolla System
         </p>
       </div>
     </div>
