@@ -11,11 +11,19 @@ export const metadata: Metadata = {
   description: 'Melocollaに参加するクリエイターたちのポートフォリオ。',
 }
 
-async function getMembers() {
-  const { data, error } = await supabase
+import MemberSearch from './MemberSearch'
+
+async function getMembers(query?: string) {
+  let request = supabase
     .from('members')
     .select('*')
     .eq('is_public', true)
+
+  if (query) {
+    request = request.or(`name.ilike.%${query}%,furigana.ilike.%${query}%,role.ilike.%${query}%,bio.ilike.%${query}%`)
+  }
+
+  const { data, error } = await request
     .order('sort_order', { ascending: true })
     .order('furigana', { ascending: true })
 
@@ -26,23 +34,33 @@ async function getMembers() {
   return data as Member[]
 }
 
-export default async function MembersPage() {
+export default async function MembersPage({
+  searchParams
+}: {
+  searchParams: Promise<{ q?: string }>
+}) {
+  const { q } = await searchParams
   const visibility = await getPageVisibility('members')
   const admin = await isAdmin()
   const isPrivate = visibility && !visibility.is_public && !admin
-  const members = isPrivate ? [] : await getMembers()
-
+  const members = isPrivate ? [] : await getMembers(q)
 
   return (
     <div className="container mx-auto px-6 py-24">
       <ScrollReveal direction="up" distance={40}>
-        <div className="max-w-4xl mx-auto mb-20 text-center">
+        <div className="max-w-4xl mx-auto mb-12 text-center">
           <h1 className="font-serif text-5xl tracking-widest text-brand mb-8">
             MEMBERS<span className="text-accent-gold ml-2">.</span>
           </h1>
           <div className="w-12 h-px bg-gradient-to-r from-transparent via-accent-gold to-transparent mx-auto" />
         </div>
       </ScrollReveal>
+
+      {!isPrivate && (
+        <ScrollReveal direction="up" distance={20} delay={0.2}>
+          <MemberSearch />
+        </ScrollReveal>
+      )}
 
       {isPrivate ? (
         <PrivatePageMessage />
@@ -65,8 +83,6 @@ export default async function MembersPage() {
 }
 
 function MemberCard({ member, index }: { member: Member, index: number }) {
-  const profileUrl = member.slug ? `/members/${member.slug}` : null
-
   return (
     <div
       className="group flex flex-col items-center text-center"
@@ -74,21 +90,7 @@ function MemberCard({ member, index }: { member: Member, index: number }) {
       <div className="relative w-40 h-40 mb-8">
         <div className="absolute inset-0 rounded-full border border-brand/10 group-hover:scale-110 transition-transform duration-700" />
         <div className="absolute inset-2 rounded-full overflow-hidden bg-brand/5 shadow-inner">
-          {profileUrl ? (
-            <Link href={profileUrl}>
-              {member.avatar_url ? (
-                <img
-                  src={member.avatar_url}
-                  alt={member.name}
-                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-brand/20">
-                  <Users size={48} strokeWidth={1} />
-                </div>
-              )}
-            </Link>
-          ) : member.avatar_url ? (
+          {member.avatar_url ? (
             <img
               src={member.avatar_url}
               alt={member.name}
@@ -103,13 +105,7 @@ function MemberCard({ member, index }: { member: Member, index: number }) {
       </div>
 
       <div className="flex flex-col gap-2">
-        {profileUrl ? (
-          <Link href={profileUrl}>
-            <h3 className="font-serif text-2xl tracking-widest text-brand hover:text-accent-gold transition-colors">{member.name}</h3>
-          </Link>
-        ) : (
-          <h3 className="font-serif text-2xl tracking-widest text-brand">{member.name}</h3>
-        )}
+        <h3 className="font-serif text-2xl tracking-widest text-brand">{member.name}</h3>
         <p className="text-xs uppercase tracking-widest text-brand-muted font-bold">{member.role}</p>
         <p className="mt-4 text-sm text-brand/60 leading-relaxed max-w-xs whitespace-pre-wrap">{member.bio}</p>
 
