@@ -78,7 +78,7 @@ export default function ApplyForm() {
 
           <div className="space-y-3">
             <label className="text-[10px] font-bold tracking-widest text-brand/40 uppercase px-1">Role / ロール・担当 <span className="text-accent-gold">*</span></label>
-            <input name="role" type="text" placeholder="例: Composer, Vocalist, Illustrator" className="w-full px-6 py-4 rounded-2xl bg-brand/5 border border-transparent focus:border-accent-gold outline-none transition-all text-sm" required />
+            <input name="role" type="text" placeholder="例: ボカロP, 歌い手, 絵師" className="w-full px-6 py-4 rounded-2xl bg-brand/5 border border-transparent focus:border-accent-gold outline-none transition-all text-sm" required />
             <p className="text-[9px] text-brand/30 px-1 leading-relaxed">あなたの主な活動内容を簡潔に記載してください。</p>
           </div>
 
