@@ -5,7 +5,8 @@ import { supabase } from '@/lib/supabase'
 export async function submitApplication(formData: FormData) {
   const name = formData.get('name') as string
   const furigana = formData.get('furigana') as string
-  const email = formData.get('email') as string
+  // emailは空文字("")になる可能性があるため、存在しない場合は null または "未入力" として扱う
+  const email = (formData.get('email') as string) || null 
   const role = formData.get('role') as string
   const bio = formData.get('bio') as string
   const slug = formData.get('slug') as string
@@ -28,7 +29,7 @@ export async function submitApplication(formData: FormData) {
   const { error } = await supabase.from('member_applications').insert({
     name,
     furigana,
-    email,
+    email, // ここで null を許可するように DB 側の制約（Nullable）も確認してください
     role,
     bio,
     slug,
@@ -41,7 +42,7 @@ export async function submitApplication(formData: FormData) {
     return { success: false, error: '申請の送信に失敗しました。' }
   }
 
-  // Optional: Notify Discord
+  // Discord 通知
   const webhookUrl = process.env.DISCORD_WEBHOOK_URL
   if (webhookUrl) {
     try {
@@ -54,7 +55,8 @@ export async function submitApplication(formData: FormData) {
             color: 0x3498db,
             fields: [
               { name: 'お名前', value: `${name} (${furigana})`, inline: true },
-              { name: 'メール', value: email, inline: true },
+              // メールが空の場合の表示を「未入力」にする
+              { name: 'メール', value: email || '未入力', inline: true },
               { name: 'ロール', value: role || '未設定' },
               { name: '希望URL', value: slug ? `/members/${slug}` : 'なし' },
             ],
