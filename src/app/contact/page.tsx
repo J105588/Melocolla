@@ -1,5 +1,7 @@
 import { Metadata } from 'next'
 import ScrollReveal from '@/components/animation/ScrollReveal'
+import { getPageVisibility, isAdmin } from '@/lib/page-visibility'
+import PrivatePageMessage from '@/components/layout/PrivatePageMessage'
 import ContactForm from '@/app/contact/ContactForm'
 
 export const metadata: Metadata = {
@@ -7,7 +9,11 @@ export const metadata: Metadata = {
   description: 'Melocollaサークルへのお問い合わせ窓口。',
 }
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const visibility = await getPageVisibility('contact')
+  const admin = await isAdmin()
+  const isPrivate = visibility && !visibility.is_public && !admin
+
   return (
     <div className="container mx-auto px-6 py-24 max-w-2xl">
       <ScrollReveal direction="up" distance={40}>
@@ -23,9 +29,15 @@ export default function ContactPage() {
         </div>
       </ScrollReveal>
 
-      <ScrollReveal direction="up" distance={30} delay={0.2}>
-        <ContactForm />
-      </ScrollReveal>
+      <div className="flex flex-col gap-16">
+        {isPrivate ? (
+          <PrivatePageMessage />
+        ) : (
+          <ScrollReveal direction="up" distance={30} delay={0.2}>
+            <ContactForm />
+          </ScrollReveal>
+        )}
+      </div>
 
       <div className="mt-16 text-center">
         <p className="text-[9px] text-brand/30 tracking-[0.4em] uppercase font-bold">
